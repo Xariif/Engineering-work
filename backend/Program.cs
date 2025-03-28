@@ -1,30 +1,43 @@
-using backend.Models;
 using Microsoft.EntityFrameworkCore;
+
+using Microsoft.AspNetCore.Identity;
+using backend.Extensions;
+using backend.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<MallDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>().AddApiEndpoints();
+
+builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.MapIdentityApi<IdentityUser>();
+
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 app.MapControllers();
 
