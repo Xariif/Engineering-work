@@ -1,8 +1,12 @@
-using Microsoft.EntityFrameworkCore;
-
-using Microsoft.AspNetCore.Identity;
-using backend.Extensions;
+using System.Text;
 using backend.Database;
+using backend.Extensions;
+using backend.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,17 +15,30 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+builder.Services.AddAuthorization(
 
-builder.Services.AddIdentityCore<IdentityUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>().AddApiEndpoints();
-
-builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ApplicationDbContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer();
 
+builder.Services.AddIdentity<User, IdentityRole>()
+   .AddEntityFrameworkStores<ApplicationDbContext>();
+
+// Configure Database Context
+builder
+    .Services.AddEntityFrameworkNpgsql()
+    .AddDbContext<ApplicationDbContext>(options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+    );
+
+// Configure Temporary Email Sender
+builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender>();
 
 var app = builder.Build();
 
@@ -32,12 +49,16 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
+// Seed roles
+using (var scope = app.Services.CreateScope())
+{
+    await RoleSeeder.SeedRolesAsync(scope.ServiceProvider);
+}
+
 app.UseHttpsRedirection();
 
-app.MapIdentityApi<IdentityUser>();
-
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

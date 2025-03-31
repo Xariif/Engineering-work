@@ -6,14 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
-    [ApiController]
     public abstract class BaseController : ControllerBase
-    {        
-         protected readonly ApplicationDbContext _context;
+    {
+        protected readonly IConfiguration _configuration;
 
-         protected BaseController(ApplicationDbContext context)
-         {
-             _context = context;
-         }
+        public BaseController(
+            IConfiguration configuration
+        )
+        {
+            _configuration = configuration;
+        }
     }
 }

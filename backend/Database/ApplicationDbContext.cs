@@ -1,5 +1,6 @@
 using Backend.Database;
 using EngineeringWork.Backend.Database;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,13 +13,16 @@ namespace backend.Database
 
         public DbSet<Mall> Malls { get; set; }
         public DbSet<Tenant> Tenants { get; set; }
-        public DbSet<TenantPeriod> TenantPeriods { get; set; }
+        public DbSet<TurnoverPeriod> TurnoverPeriods { get; set; }
+        public DbSet<Turnover> Turnovers { get; set; }
+        public DbSet<Access> Accesses { get; set; }
+        public DbSet<Newsletter> Newsletters { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            // Mall → Store (One-to-Many)
+            // Mall → Tenant (One-to-Many)
             builder
                 .Entity<Tenant>()
                 .HasOne(s => s.Mall)
@@ -26,20 +30,20 @@ namespace backend.Database
                 .HasForeignKey(s => s.MallId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Store → TenantPeriod (One-to-Many)
+            // Tenant → TurnoverPeriod (One-to-Many)
             builder
-                .Entity<TenantPeriod>()
+                .Entity<TurnoverPeriod>()
                 .HasOne(tp => tp.Tenant)
-                .WithMany(s => s.TenantPeriods)
+                .WithMany(s => s.TurnoverPeriods)
                 .HasForeignKey(tp => tp.TenantId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // TenantPeriod → Turnover (One-to-Many)
+            // TurnoverPeriod → Turnover (One-to-Many)
             builder
                 .Entity<Turnover>()
-                .HasOne(t => t.TenantPeriod)
+                .HasOne(t => t.TurnoverPeriod)
                 .WithMany(tp => tp.Turnovers)
-                .HasForeignKey(t => t.TenantPeriodId)
+                .HasForeignKey(t => t.TurnoverPeriodId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Turnover → User (Many-to-One)
@@ -48,6 +52,22 @@ namespace backend.Database
                 .HasOne(t => t.User)
                 .WithMany()
                 .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Access → User (Many-to-One)
+            builder
+                .Entity<Access>()
+                .HasOne(a => a.User)
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // User -> Newsletter (One-to-Many)
+            builder
+                .Entity<Newsletter>()
+                .HasOne(n => n.User)
+                .WithMany()
+                .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

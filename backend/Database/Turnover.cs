@@ -1,17 +1,18 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using backend.Database;
+using Microsoft.AspNetCore.Identity;
 
 public class Turnover
 {
     [Key]
-    public int Id { get; set; }
-    [ForeignKey("TenantPeriodId")]
-    public int TenantPeriodId { get; set; }
-    public TenantPeriod TenantPeriod { get; set; }
-    public decimal Value { get; set; }
-    public DateTime Date { get; set; }
+    public required int Id { get; set; }
+    [ForeignKey("TurnoverPeriodId")]
+    public required int TurnoverPeriodId { get; set; }
+    public required TurnoverPeriod TurnoverPeriod { get; set; }
+    public required decimal Value { get; set; }
+    public required DateTime Date { get; set; }
     [ForeignKey("UserId")]
-    public string UserId { get; set; }
-    public User User { get; set; }
+    public required string UserId { get; set; }
+    public required IdentityUser User { get; set; }
 }
