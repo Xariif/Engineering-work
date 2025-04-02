@@ -31,6 +31,8 @@ namespace backend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Surname = table.Column<string>(type: "text", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -172,6 +174,83 @@ namespace backend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Tenants",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Category = table.Column<string>(type: "text", nullable: false),
+                    ImageUrl = table.Column<string>(type: "text", nullable: false),
+                    MallId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tenants", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tenants_Malls_MallId",
+                        column: x => x.MallId,
+                        principalTable: "Malls",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TenantPeriods",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TenantId = table.Column<int>(type: "integer", nullable: false),
+                    MallId = table.Column<int>(type: "integer", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TenantPeriods", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TenantPeriods_Malls_MallId",
+                        column: x => x.MallId,
+                        principalTable: "Malls",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TenantPeriods_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Turnovers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TenantPeriodId = table.Column<int>(type: "integer", nullable: false),
+                    Value = table.Column<decimal>(type: "numeric", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Turnovers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Turnovers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Turnovers_TenantPeriods_TenantPeriodId",
+                        column: x => x.TenantPeriodId,
+                        principalTable: "TenantPeriods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -208,6 +287,31 @@ namespace backend.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TenantPeriods_MallId",
+                table: "TenantPeriods",
+                column: "MallId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TenantPeriods_TenantId",
+                table: "TenantPeriods",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tenants_MallId",
+                table: "Tenants",
+                column: "MallId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Turnovers_TenantPeriodId",
+                table: "Turnovers",
+                column: "TenantPeriodId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Turnovers_UserId",
+                table: "Turnovers",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -229,13 +333,22 @@ namespace backend.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Malls");
+                name: "Turnovers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "TenantPeriods");
+
+            migrationBuilder.DropTable(
+                name: "Tenants");
+
+            migrationBuilder.DropTable(
+                name: "Malls");
         }
     }
 }

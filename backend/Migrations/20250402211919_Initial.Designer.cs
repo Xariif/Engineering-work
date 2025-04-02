@@ -12,8 +12,8 @@ using backend.Database;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250321135953_RefactorDbStructure")]
-    partial class RefactorDbStructure
+    [Migration("20250402211919_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -264,7 +264,7 @@ namespace backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Turnover");
+                    b.ToTable("Turnovers");
                 });
 
             modelBuilder.Entity("backend.Database.User", b =>
@@ -292,6 +292,10 @@ namespace backend.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -310,6 +314,10 @@ namespace backend.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -421,7 +429,7 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.HasOne("backend.Database.User", "User")
-                        .WithMany()
+                        .WithMany("Turnovers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -442,6 +450,11 @@ namespace backend.Migrations
                 });
 
             modelBuilder.Entity("TenantPeriod", b =>
+                {
+                    b.Navigation("Turnovers");
+                });
+
+            modelBuilder.Entity("backend.Database.User", b =>
                 {
                     b.Navigation("Turnovers");
                 });

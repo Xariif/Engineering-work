@@ -49,8 +49,8 @@ namespace backend.Database
             // Turnover → User (Many-to-One)
             builder
                 .Entity<Turnover>()
-                .HasOne(t => t.User)
-                .WithMany()
+                .HasOne(u => u.User)
+                .WithMany(t => t.Turnovers)
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 

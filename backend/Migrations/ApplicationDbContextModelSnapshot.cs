@@ -367,6 +367,7 @@ namespace backend.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Turnovers");
+                    b.ToTable("Turnovers");
                 });
 
             modelBuilder.Entity("TurnoverPeriod", b =>

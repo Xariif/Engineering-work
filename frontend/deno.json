@@ -1,0 +1,35 @@
+{
+  "tasks": {
+    "dev": "deno run -A --node-modules-dir npm:vite",
+    "build": "deno run -A --node-modules-dir npm:vite build",
+    "preview": "deno run -A --node-modules-dir npm:vite preview",
+    "serve": "deno run --allow-net --allow-read jsr:@std/http@1/file-server dist/"
+  },
+  "compilerOptions": {
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "jsxImportSourceTypes": "@types/react"
+  },
+  "imports": {
+    "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.4",
+    "@emotion/react": "npm:@emotion/react@^11.14.0",
+    "@emotion/styled": "npm:@emotion/styled@^11.14.0",
+    "@fontsource/roboto": "npm:@fontsource/roboto@^5.2.5",
+    "@mui/icons-material": "npm:@mui/icons-material@^7.0.1",
+    "@mui/material": "npm:@mui/material@^7.0.1",
+    "@mui/styled-engine-sc": "npm:@mui/styled-engine-sc@^7.0.1",
+    "@mui/x-data-grid": "npm:@mui/x-data-grid@^7.28.2",
+    "@mui/x-date-pickers": "npm:@mui/x-date-pickers@^7.28.2",
+    "@types/react": "npm:@types/react@^19.0.10",
+    "@types/react-dom": "npm:@types/react-dom@^19.0.4",
+    "@vitejs/plugin-react": "npm:@vitejs/plugin-react@^4.3.4",
+    "date-fns": "npm:date-fns@^2.13.0",
+    "dayjs": "npm:dayjs@^1.11.13",
+    "react": "npm:react@^19.0.0",
+    "react-dom": "npm:react-dom@^19.0.0",
+    "react-router-dom": "npm:react-router-dom@^7.4.1",
+    "styled-components": "npm:styled-components@^6.1.16",
+    "vite": "npm:vite@^6.1.1"
+  }
+}
