@@ -2,7 +2,7 @@ using System;
 
 namespace backend.Models.Account.Response;
 
-public class SetNewPasswordResponse
+public class ChangeEmailResponse
 {
     public required string Message { get; set; }
 }
