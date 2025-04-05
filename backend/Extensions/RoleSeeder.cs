@@ -9,7 +9,7 @@ namespace backend.Extensions
         public static async Task SeedRolesAsync(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
 
             // Define roles
             string[] roles = { "Tenant", "Manager" };

@@ -14,5 +14,5 @@ public class Turnover
     public required DateTime Date { get; set; }
     [ForeignKey("UserId")]
     public required string UserId { get; set; }
-    public required IdentityUser User { get; set; }
+    public required User User { get; set; }
 }

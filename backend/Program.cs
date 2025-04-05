@@ -38,7 +38,7 @@ builder
     );
 
 // Configure Temporary Email Sender
-builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender>();
+builder.Services.AddSingleton<IEmailSender<User>, NoOpEmailSender>();
 
 var app = builder.Build();
 

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,7 @@ namespace backend.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Surname = table.Column<string>(type: "text", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -87,6 +88,28 @@ namespace backend.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Accesses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    ResourceId = table.Column<string>(type: "text", nullable: false),
+                    ResourceType = table.Column<int>(type: "integer", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Accesses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Accesses_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,6 +198,36 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Newsletters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    MallId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Newsletters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Newsletters_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Newsletters_Malls_MallId",
+                        column: x => x.MallId,
+                        principalTable: "Malls",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tenants",
                 columns: table => new
                 {
@@ -197,26 +250,19 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TenantPeriods",
+                name: "TurnoverPeriods",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TenantId = table.Column<int>(type: "integer", nullable: false),
-                    MallId = table.Column<int>(type: "integer", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TenantPeriods", x => x.Id);
+                    table.PrimaryKey("PK_TurnoverPeriods", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TenantPeriods_Malls_MallId",
-                        column: x => x.MallId,
-                        principalTable: "Malls",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TenantPeriods_Tenants_TenantId",
+                        name: "FK_TurnoverPeriods_Tenants_TenantId",
                         column: x => x.TenantId,
                         principalTable: "Tenants",
                         principalColumn: "Id",
@@ -229,7 +275,7 @@ namespace backend.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    TenantPeriodId = table.Column<int>(type: "integer", nullable: false),
+                    TurnoverPeriodId = table.Column<int>(type: "integer", nullable: false),
                     Value = table.Column<decimal>(type: "numeric", nullable: false),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: false)
@@ -242,14 +288,19 @@ namespace backend.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Turnovers_TenantPeriods_TenantPeriodId",
-                        column: x => x.TenantPeriodId,
-                        principalTable: "TenantPeriods",
+                        name: "FK_Turnovers_TurnoverPeriods_TurnoverPeriodId",
+                        column: x => x.TurnoverPeriodId,
+                        principalTable: "TurnoverPeriods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Accesses_UserId",
+                table: "Accesses",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -289,14 +340,14 @@ namespace backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_TenantPeriods_MallId",
-                table: "TenantPeriods",
+                name: "IX_Newsletters_MallId",
+                table: "Newsletters",
                 column: "MallId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TenantPeriods_TenantId",
-                table: "TenantPeriods",
-                column: "TenantId");
+                name: "IX_Newsletters_UserId",
+                table: "Newsletters",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tenants_MallId",
@@ -304,9 +355,14 @@ namespace backend.Migrations
                 column: "MallId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Turnovers_TenantPeriodId",
+                name: "IX_TurnoverPeriods_TenantId",
+                table: "TurnoverPeriods",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Turnovers_TurnoverPeriodId",
                 table: "Turnovers",
-                column: "TenantPeriodId");
+                column: "TurnoverPeriodId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Turnovers_UserId",
@@ -317,6 +373,9 @@ namespace backend.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Accesses");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -333,6 +392,9 @@ namespace backend.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Newsletters");
+
+            migrationBuilder.DropTable(
                 name: "Turnovers");
 
             migrationBuilder.DropTable(
@@ -342,7 +404,7 @@ namespace backend.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "TenantPeriods");
+                name: "TurnoverPeriods");
 
             migrationBuilder.DropTable(
                 name: "Tenants");

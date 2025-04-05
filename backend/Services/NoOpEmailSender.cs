@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace backend.Services
 {
-    public class NoOpEmailSender : Microsoft.AspNetCore.Identity.IEmailSender<IdentityUser>
+    public class NoOpEmailSender : Microsoft.AspNetCore.Identity.IEmailSender<User>
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {
@@ -11,19 +11,19 @@ namespace backend.Services
             return Task.CompletedTask;
         }
 
-        public Task SendConfirmationLinkAsync(IdentityUser user, string link, string subject)
+        public Task SendConfirmationLinkAsync(User user, string link, string subject)
         {
             // No-op implementation
             return Task.CompletedTask;
         }
 
-        public Task SendPasswordResetLinkAsync(IdentityUser user, string link, string subject)
+        public Task SendPasswordResetLinkAsync(User user, string link, string subject)
         {
             // No-op implementation
             return Task.CompletedTask;
         }
 
-        public Task SendPasswordResetCodeAsync(IdentityUser user, string code, string subject)
+        public Task SendPasswordResetCodeAsync(User user, string code, string subject)
         {
             // No-op implementation
             return Task.CompletedTask;

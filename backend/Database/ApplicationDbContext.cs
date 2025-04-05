@@ -38,19 +38,11 @@ namespace backend.Database
                 .HasForeignKey(tp => tp.TenantId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // TurnoverPeriod → Turnover (One-to-Many)
-            builder
-                .Entity<Turnover>()
-                .HasOne(t => t.TurnoverPeriod)
-                .WithMany(tp => tp.Turnovers)
-                .HasForeignKey(t => t.TurnoverPeriodId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             // Turnover → User (Many-to-One)
             builder
                 .Entity<Turnover>()
                 .HasOne(u => u.User)
-                .WithMany(t => t.Turnovers)
+                .WithMany(u => u.Turnovers)
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -59,7 +51,6 @@ namespace backend.Database
                 .Entity<Access>()
                 .HasOne(a => a.User)
                 .WithMany()
-                .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // User -> Newsletter (One-to-Many)

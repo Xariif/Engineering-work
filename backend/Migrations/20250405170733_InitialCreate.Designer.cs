@@ -12,8 +12,8 @@ using backend.Database;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250402211919_Initial")]
-    partial class Initial
+    [Migration("20250405170733_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,35 @@ namespace backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Backend.Database.Access", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ResourceId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ResourceType")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Accesses");
+                });
 
             modelBuilder.Entity("Backend.Database.Mall", b =>
                 {
@@ -47,6 +76,44 @@ namespace backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Malls");
+                });
+
+            modelBuilder.Entity("Backend.Database.Newsletter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("MallId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MallId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Newsletters");
                 });
 
             modelBuilder.Entity("EngineeringWork.Backend.Database.Tenant", b =>
@@ -211,32 +278,6 @@ namespace backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TenantPeriod", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MallId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("TenantId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MallId");
-
-                    b.HasIndex("TenantId");
-
-                    b.ToTable("TenantPeriods");
-                });
-
             modelBuilder.Entity("Turnover", b =>
                 {
                     b.Property<int>("Id")
@@ -248,7 +289,7 @@ namespace backend.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("TenantPeriodId")
+                    b.Property<int>("TurnoverPeriodId")
                         .HasColumnType("integer");
 
                     b.Property<string>("UserId")
@@ -260,11 +301,32 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantPeriodId");
+                    b.HasIndex("TurnoverPeriodId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Turnovers");
+                });
+
+            modelBuilder.Entity("TurnoverPeriod", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("TurnoverPeriods");
                 });
 
             modelBuilder.Entity("backend.Database.User", b =>
@@ -284,6 +346,9 @@ namespace backend.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("LockoutEnabled")
@@ -337,6 +402,36 @@ namespace backend.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Backend.Database.Access", b =>
+                {
+                    b.HasOne("backend.Database.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Backend.Database.Newsletter", b =>
+                {
+                    b.HasOne("Backend.Database.Mall", "Mall")
+                        .WithMany()
+                        .HasForeignKey("MallId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Database.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Mall");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EngineeringWork.Backend.Database.Tenant", b =>
@@ -401,42 +496,34 @@ namespace backend.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TenantPeriod", b =>
-                {
-                    b.HasOne("Backend.Database.Mall", "Mall")
-                        .WithMany()
-                        .HasForeignKey("MallId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EngineeringWork.Backend.Database.Tenant", "Tenant")
-                        .WithMany("TenantPeriods")
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Mall");
-
-                    b.Navigation("Tenant");
-                });
-
             modelBuilder.Entity("Turnover", b =>
                 {
-                    b.HasOne("TenantPeriod", "TenantPeriod")
+                    b.HasOne("TurnoverPeriod", "TurnoverPeriod")
                         .WithMany("Turnovers")
-                        .HasForeignKey("TenantPeriodId")
+                        .HasForeignKey("TurnoverPeriodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("backend.Database.User", "User")
                         .WithMany("Turnovers")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("TurnoverPeriod");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TurnoverPeriod", b =>
+                {
+                    b.HasOne("EngineeringWork.Backend.Database.Tenant", "Tenant")
+                        .WithMany("TurnoverPeriods")
+                        .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TenantPeriod");
-
-                    b.Navigation("User");
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("Backend.Database.Mall", b =>
@@ -446,10 +533,10 @@ namespace backend.Migrations
 
             modelBuilder.Entity("EngineeringWork.Backend.Database.Tenant", b =>
                 {
-                    b.Navigation("TenantPeriods");
+                    b.Navigation("TurnoverPeriods");
                 });
 
-            modelBuilder.Entity("TenantPeriod", b =>
+            modelBuilder.Entity("TurnoverPeriod", b =>
                 {
                     b.Navigation("Turnovers");
                 });

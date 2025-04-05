@@ -13,6 +13,9 @@ public class TurnoverPeriod
     public required int TenantId { get; set; }
     public required Tenant Tenant { get; set; }
     public required DateTime StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
+    public required int Month { get; set; }
+    public required int Year { get; set; }
     public required ICollection<Turnover> Turnovers { get; set; }
 
 }

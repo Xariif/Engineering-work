@@ -1,6 +1,7 @@
 
 
 using System.ComponentModel.DataAnnotations.Schema;
+using backend.Database;
 using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Database
@@ -19,6 +20,6 @@ namespace Backend.Database
 
         [ForeignKey("UserId")]
         public required string UserId { get; set; }
-        public required IdentityUser User { get; set; }
+        public required User User { get; set; }
     }
 }

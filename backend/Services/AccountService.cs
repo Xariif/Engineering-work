@@ -13,15 +13,15 @@ namespace backend.Services;
 
 public class AccountService : BaseService
 {
-    protected readonly UserManager<IdentityUser> _userManager;
-    protected readonly SignInManager<IdentityUser> _signInManager;
+    protected readonly UserManager<User> _userManager;
+    protected readonly SignInManager<User> _signInManager;
     protected readonly RoleManager<IdentityRole> _roleManager;
 
     public AccountService(
         ApplicationDbContext context,
         IConfiguration configuration,
-        UserManager<IdentityUser> userManager,
-        SignInManager<IdentityUser> signInManager,
+        UserManager<User> userManager,
+        SignInManager<User> signInManager,
         RoleManager<IdentityRole> roleManager,
         IHttpContextAccessor httpContextAccessor
     )
@@ -50,17 +50,9 @@ public class AccountService : BaseService
 
         if (result.Succeeded)
         {
-            var token = await GenerateJwtTokenAsync(user);
+            var token = GenerateJwtToken(user);
             return new OkObjectResult(
-                new LoginResponse
-                {
-                    Token = token,
-                    FirstName = _userManager.FirstName,
-                    LastName = request.LastName,
-                    PhoneNumber = request.PhoneNumber,
-                    Email = request.Email,
-                    Role = request.Role,
-                }
+               null
             );
         }
         return new BadRequestObjectResult(new { Message = "Invalid login attempt" });   
@@ -68,7 +60,7 @@ public class AccountService : BaseService
      
 
 
-    private string GenerateJwtToken(IdentityUser user)
+    private string GenerateJwtToken(User user)
     {
         var claims = new List<Claim>
         {
