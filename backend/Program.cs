@@ -10,14 +10,23 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthorization(
-
-);
+builder.Services.AddAuthorization();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -50,11 +59,8 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
-// Seed roles
-using (var scope = app.Services.CreateScope())
-{
-    await RoleSeeder.SeedRolesAsync(scope.ServiceProvider);
-}
+// Use CORS policy
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 
@@ -62,5 +68,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Seed roles
+using (var scope = app.Services.CreateScope())
+{
+    await RoleSeeder.SeedRolesAsync(scope.ServiceProvider);
+}
 
 app.Run();

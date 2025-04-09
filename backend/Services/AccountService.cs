@@ -35,7 +35,12 @@ public class AccountService : BaseService
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
+        if (user == null || !user.IsActive)
+        {
+            throw new Exception("Invalid login attempt or account is inactive");
+        }
+
+        if (!await _userManager.CheckPasswordAsync(user, request.Password))
         {
             throw new Exception("Invalid login attempt");
         }
@@ -67,7 +72,8 @@ public class AccountService : BaseService
             Email = request.Email,
             Name = request.FirstName,
             Surname = request.LastName,
-            PhoneNumber = request.PhoneNumber
+            PhoneNumber = request.PhoneNumber,
+            IsActive = false
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
@@ -85,9 +91,9 @@ public class AccountService : BaseService
     public async Task<ResetPasswordResponse> GeneratePasswordResetTokenAsync(ResetPasswordRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null)
+        if (user == null || !user.IsActive)
         {
-            throw new Exception("User not found");
+            throw new Exception("User not found or account is inactive");
         }
 
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -105,9 +111,9 @@ public class AccountService : BaseService
         }
 
         var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null)
+        if (user == null || !user.IsActive)
         {
-            throw new Exception("User not found");
+            throw new Exception("User not found or account is inactive");
         }
 
         var result = await _userManager.ResetPasswordAsync(user, request.Token, request.Password);
@@ -125,9 +131,9 @@ public class AccountService : BaseService
     public async Task<ChangeEmailResponse> ChangeEmailAsync(ChangeEmailRequest request)
     {
         var user = await _userManager.FindByIdAsync(request.UserId);
-        if (user == null)
+        if (user == null || !user.IsActive)
         {
-            throw new Exception("User not found");
+            throw new Exception("User not found or account is inactive");
         }
 
         var token = await _userManager.GenerateChangeEmailTokenAsync(user, request.NewEmail);

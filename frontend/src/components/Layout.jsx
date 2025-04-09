@@ -20,27 +20,20 @@ const Layout = () => {
 		{ to: "/turnover", icon: <TrendingUpIcon />, label: "Turnover" },
 		{ to: "/reports", icon: <BarChartIcon />, label: "Reports" },
 		{ to: "/permissions", icon: <SecurityIcon />, label: "Permissions" },
-		{ to: "/login", icon: <LoginIcon />, label: "Login" },
 		{ to: "/logout", icon: <LogoutIcon />, label: "Logout" },
 	];
 
 	return (
 		<Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-			{/* Header */}
 			<AppBar position="static">
-				<Container maxWidth="lg">
+				<Container maxWidth="lg" sx={{borderRadius: 'none'}}>
 					<Toolbar>
-						{/* Logo */}
 						<IconButton edge="start" color="inherit" component={Link} to="/" sx={{ mr: 2 }}>
 							<HomeIcon />
 						</IconButton>
-
-						{/* Title */}
 						<Typography variant="h6" sx={{ flexGrow: 1 }}>
 							Engineering Work
 						</Typography>
-
-						{/* Navigation */}
 						{isSmallScreen ? (
 							<>
 								<IconButton color="inherit" onClick={() => setDrawerOpen(true)}>
@@ -69,12 +62,10 @@ const Layout = () => {
 				</Container>
 			</AppBar>
 
-			{/* Main Content */}
 			<Container maxWidth="lg" sx={{ flexGrow: 1, py: 3 }}>
 				<Outlet />
 			</Container>
 
-			{/* Footer */}
 			<Box component="footer" sx={{ py: 2, textAlign: "center", backgroundColor: "background.default" }}>
 				<Container maxWidth="lg">
 					<Typography variant="body2" color="text.secondary">

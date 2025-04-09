@@ -1,30 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Container } from "@mui/material";
-import { useSearchParams } from "react-router-dom";
+import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined"; // Import the registration icon
+import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined"; // Import the back arrow icon
+import { useNavigate } from "react-router-dom";
+import { useToast } from "../context/ToastContext.jsx";
+import accountService from "../services/accountService.js";
 
 const Register = () => {
-    const [name, setName] = useState("");
-    const [surname, setSurname] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
-    const [token, setToken] = useState("");
 
-    const [searchParams] = useSearchParams();
-
-    useEffect(() => {
-        const tokenFromUrl = searchParams.get("token");
-        if (tokenFromUrl) {
-            //ask api if the token is valid
-            setToken(tokenFromUrl);
-        }
-    }, [searchParams]);
+    const navigate = useNavigate();
+    const { showToast } = useToast();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Name:", name);
-        console.log("Surname:", surname);
-        console.log("Phone Number:", phoneNumber);
-        console.log("Token:", token);
-        // Add logic to send the data to the server with the token in the header
+
+        if (password !== confirmPassword) {
+            showToast("Passwords do not match.", "error");
+            return;
+        }
+
+        accountService
+            .register(email, password, confirmPassword, firstName, lastName, phoneNumber)
+            .then(() => {
+                showToast("Registration successful!", "success");
+                navigate("/login");
+            })
+            .catch((error) => {
+                const errorMessage = error.response?.data?.Message || "An error occurred during registration.";
+                showToast(errorMessage, "error");
+            });
+    };
+
+    const handleBack = () => {
+        navigate("/login");
     };
 
     return (
@@ -44,22 +58,56 @@ const Register = () => {
                     backgroundColor: "background.paper",
                 }}
             >
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginBottom: 2,
+                    }}
+                >
+                    <PersonAddOutlinedIcon sx={{ fontSize: 40, color: "primary.main" }} />
+                </Box>
                 <Typography variant="h4" component="h1" textAlign="center" gutterBottom>
                     Register
                 </Typography>
                 <TextField
-                    label="Name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    label="Email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                     fullWidth
                 />
                 <TextField
-                    label="Surname"
+                    label="Password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    fullWidth
+                />
+                <TextField
+                    label="Confirm Password"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    fullWidth
+                />
+                <TextField
+                    label="First Name"
                     type="text"
-                    value={surname}
-                    onChange={(e) => setSurname(e.target.value)}
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
+                    fullWidth
+                />
+                <TextField
+                    label="Last Name"
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                     required
                     fullWidth
                 />
@@ -73,6 +121,15 @@ const Register = () => {
                 />
                 <Button type="submit" variant="contained" color="primary" fullWidth>
                     Register
+                </Button>
+                <Button
+                    variant="outlined"
+                    color="secondary"
+                    fullWidth
+                    onClick={handleBack}
+                    startIcon={<ArrowBackIosNewOutlinedIcon />} // Add the back arrow icon
+                >
+                    Back
                 </Button>
             </Box>
         </Container>

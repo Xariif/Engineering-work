@@ -11,24 +11,24 @@ import Permissions from "./page/Permissions.jsx";
 import Turnover from "./page/Turnover.jsx";
 import Logout from "./page/Logout.jsx";
 import ForgotPassword from "./page/ForgotPassword.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx"; // Import the ProtectedRoute
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const customTheme = createTheme({
     palette: {
         mode: "dark",
         primary: {
-            main: "#6a11cb", // Vibrant purple
+            main: "#6a11cb",
         },
         secondary: {
-            main: "#2575fc", // Bright blue
+            main: "#2575fc",
         },
         background: {
-            default: "#121212", // Dark background
-            paper: "#1e1e1e", // Slightly lighter for cards
+            default: "#121212",
+            paper: "#1e1e1e",
         },
         text: {
-            primary: "#ffffff", // White text
-            secondary: "#b0bec5", // Subtle gray text
+            primary: "#ffffff",
+            secondary: "#b0bec5",
         },
     },
     typography: {
@@ -48,15 +48,18 @@ const customTheme = createTheme({
             color: "#b0bec5",
         },
         button: {
-            textTransform: "none", // Disable uppercase for buttons
+            textTransform: "none",
             fontWeight: 600,
         },
+    },
+    shape: {
+        borderRadius: 20,
     },
     components: {
         MuiButton: {
             styleOverrides: {
                 root: {
-                    borderRadius: "8px", // Rounded buttons
+                    borderRadius: "20px",
                     padding: "10px 20px",
                 },
                 containedPrimary: {
@@ -76,11 +79,25 @@ const customTheme = createTheme({
                 },
             },
         },
-        MuiPaper: {
+        MuiTextField: {
             styleOverrides: {
                 root: {
-                    backgroundColor: "#1e1e1e",
-                    color: "#ffffff",
+                    borderRadius: "20px",
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    borderRadius: "20px",
+                },
+            },
+        },
+        MuiSnackbar: {
+            styleOverrides: {
+                root: {
+                    borderRadius: "20px",
+                    overflow: "hidden",
                 },
             },
         },
@@ -93,7 +110,6 @@ function App() {
             <ThemeProvider theme={customTheme}>
                 <CssBaseline />
                 <Routes>
-                    {/* Protected Routes */}
                     <Route
                         element={
                             <ProtectedRoute>
@@ -105,8 +121,6 @@ function App() {
                         <Route path="/permissions" element={<Permissions />} />
                         <Route path="/turnover" element={<Turnover />} />
                     </Route>
-
-                    {/* Public Routes */}
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/logout" element={<Logout />} />

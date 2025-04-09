@@ -23,11 +23,39 @@ namespace backend.Extensions
                 }
             }
 
-            // Optionally, assign roles to specific users
-            var user = await userManager.FindByEmailAsync("manager@example.com");
-            if (user != null && !await userManager.IsInRoleAsync(user, "Manager"))
+            // Create a default manager account
+            var managerEmail = "manager@example.com";
+            var managerPassword = "Manager123!";
+            var managerUser = await userManager.FindByEmailAsync(managerEmail);
+
+            if (managerUser == null)
             {
-                await userManager.AddToRoleAsync(user, "Manager");
+                managerUser = new User
+                {
+                    UserName = managerEmail,
+                    Email = managerEmail,
+                    Name = "Default",
+                    Surname = "Manager",
+                    PhoneNumber = "123456789"
+                };
+
+                var result = await userManager.CreateAsync(managerUser, managerPassword);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(managerUser, "Manager");
+                }
+                else
+                {
+                    throw new Exception($"Failed to create manager account: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                }
+            }
+            else
+            {
+                // Ensure the manager has the "Manager" role
+                if (!await userManager.IsInRoleAsync(managerUser, "Manager"))
+                {
+                    await userManager.AddToRoleAsync(managerUser, "Manager");
+                }
             }
         }
     }
