@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Backend.Database;
+using backend.Database;
 
 namespace EngineeringWork.Backend.Database
 {
@@ -14,6 +15,6 @@ namespace EngineeringWork.Backend.Database
         [ForeignKey("MallId")]
         public required int MallId { get; set; }
         public required Mall Mall { get; set; }
-        public required ICollection<TurnoverPeriod> TurnoverPeriods { get; set; }
+        public required ICollection<Turnover> Turnovers{ get; set; }
     }
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AppBar, Toolbar, Typography, Box, Container, Button, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box, Container, Button, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
 import { Link, Outlet } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
@@ -10,16 +10,26 @@ import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SecurityIcon from "@mui/icons-material/Security";
 import MenuIcon from "@mui/icons-material/Menu";
+import PersonIcon from "@mui/icons-material/Person";
+import { Brightness4, Brightness7 } from '@mui/icons-material';
 
-const Layout = () => {
+const Layout = ({ onThemeToggle, themeMode }) => {
 	const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 	const [drawerOpen, setDrawerOpen] = useState(false);
 
+	// Get user role from localStorage
+	const userDetails = JSON.parse(localStorage.getItem("userDetails") || "{}");
+	const userRole = userDetails.role || "";
+
+	// Define navigation links based on user role
 	const navLinks = [
 		{ to: "/", icon: <DashboardIcon />, label: "Dashboard" },
 		{ to: "/turnover", icon: <TrendingUpIcon />, label: "Turnover" },
-		{ to: "/reports", icon: <BarChartIcon />, label: "Reports" },
-		{ to: "/permissions", icon: <SecurityIcon />, label: "Permissions" },
+		{ to: "/profile", icon: <PersonIcon />, label: "Profile" },
+		...(userRole === "Manager" ? [
+			{ to: "/reports", icon: <BarChartIcon />, label: "Reports" },
+			{ to: "/permissions", icon: <SecurityIcon />, label: "Permissions" }
+		] : []),
 		{ to: "/logout", icon: <LogoutIcon />, label: "Logout" },
 	];
 
@@ -34,6 +44,11 @@ const Layout = () => {
 						<Typography variant="h6" sx={{ flexGrow: 1 }}>
 							Engineering Work
 						</Typography>
+						<Tooltip title={`Switch to ${themeMode === 'light' ? 'dark' : 'light'} mode`}>
+							<IconButton onClick={onThemeToggle} color="inherit">
+								{themeMode === 'light' ? <Brightness4 /> : <Brightness7 />}
+							</IconButton>
+						</Tooltip>
 						{isSmallScreen ? (
 							<>
 								<IconButton color="inherit" onClick={() => setDrawerOpen(true)}>

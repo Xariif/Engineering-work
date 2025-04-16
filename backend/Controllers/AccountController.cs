@@ -1,7 +1,9 @@
 using backend.Models.Account.Request;
 using backend.Models.Account.Response;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace backend.Controllers
 {
@@ -76,6 +78,7 @@ namespace backend.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("change-email")]
         public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailRequest request)
         {
@@ -83,6 +86,48 @@ namespace backend.Controllers
             {
                 var response = await _accountService.ChangeEmailAsync(request);
                 return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new { Message = "User ID not found in token" });
+            }
+
+            try
+            {
+                var profile = await _accountService.GetProfileAsync(userId);
+                return Ok(profile);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpPut("profile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(new { Message = "User ID not found in token" });
+            }
+
+            try
+            {
+                var profile = await _accountService.UpdateProfileAsync(userId, request);
+                return Ok(profile);
             }
             catch (Exception ex)
             {

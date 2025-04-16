@@ -18,10 +18,10 @@ const apiService = {
     },
 
     request: async (endpoint, options) => {
-        const token = localStorage.getItem("authToken"); // Retrieve the auth token
+        const token = localStorage.getItem("authToken");
         const headers = {
             "Content-Type": "application/json",
-            ...(token && { Authorization: `Bearer ${token}` }), // Add Authorization header if token exists
+            ...(token && { Authorization: `Bearer ${token}` }),
         };
 
         try {
@@ -30,13 +30,24 @@ const apiService = {
                 headers: { ...headers, ...options.headers },
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || "Something went wrong");
+                // If we have validation errors, throw them with the full error response
+                if (data.errors) {
+                    const error = new Error();
+                    error.response = { data };
+                    throw error;
+                }
+                // Otherwise throw with a general message
+                throw new Error(data.message || "Something went wrong");
             }
 
-            return await response.json();
+            return data;
         } catch (error) {
+            if (error.response) {
+                throw error; // Re-throw validation errors
+            }
             console.error("API Request Error:", error.message);
             throw error;
         }

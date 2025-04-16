@@ -26,7 +26,7 @@ namespace Backend.Database
 
     public enum ResourceType
     {
-        Mall,
-        Store,
+        Mall = 0,
+        Store = 1,
     }
 }

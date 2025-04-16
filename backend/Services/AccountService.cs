@@ -55,7 +55,7 @@ public class AccountService : BaseService
             LastName = user.Surname,
             PhoneNumber = user.PhoneNumber,
             Email = user.Email,
-            Role = roles.FirstOrDefault() ?? "User"
+            Role = roles.FirstOrDefault() ?? "Tenant",
         };
     }
 
@@ -150,27 +150,116 @@ public class AccountService : BaseService
         };
     }
 
+    public async Task<UserProfileResponse> GetProfileAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null || !user.IsActive)
+        {
+            throw new Exception("User not found or account is inactive");
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+
+        return new UserProfileResponse
+        {
+            FirstName = user.Name,
+            LastName = user.Surname,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            Role = roles.FirstOrDefault() ?? "Tenant"
+        };
+    }
+
+    public async Task<UserProfileResponse> UpdateProfileAsync(string userId, UpdateProfileRequest request)
+    {
+        if (request == null)
+        {
+            throw new Exception("Request cannot be null");
+        }
+
+        // Validate first name
+        if (string.IsNullOrWhiteSpace(request.FirstName) || request.FirstName.Length < 3)
+        {
+            throw new Exception("First name must be at least 3 characters long");
+        }
+        if (!System.Text.RegularExpressions.Regex.IsMatch(request.FirstName, @"^[a-zA-Z\s]*$"))
+        {
+            throw new Exception("First name can only contain letters and spaces");
+        }
+
+        // Validate last name
+        if (string.IsNullOrWhiteSpace(request.LastName) || request.LastName.Length < 3)
+        {
+            throw new Exception("Last name must be at least 3 characters long");
+        }
+        if (!System.Text.RegularExpressions.Regex.IsMatch(request.LastName, @"^[a-zA-Z\s]*$"))
+        {
+            throw new Exception("Last name can only contain letters and spaces");
+        }
+
+        // Validate phone number if provided
+        if (!string.IsNullOrWhiteSpace(request.PhoneNumber) && 
+            !System.Text.RegularExpressions.Regex.IsMatch(request.PhoneNumber, @"^\d{9}$"))
+        {
+            throw new Exception("Phone number must be exactly 9 digits");
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null || !user.IsActive)
+        {
+            throw new Exception("User not found or account is inactive");
+        }
+
+        user.Name = request.FirstName.Trim();
+        user.Surname = request.LastName.Trim();
+        user.PhoneNumber = request.PhoneNumber?.Trim();
+
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+
+        return new UserProfileResponse
+        {
+            FirstName = user.Name,
+            LastName = user.Surname,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            Role = roles.FirstOrDefault() ?? "Tenant"
+        };
+    }
+
     private string GenerateJwtToken(User user)
     {
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Name, user.Email),
+            new Claim("firstName", user.Name ?? ""),
+            new Claim("lastName", user.Surname ?? ""),
+            new Claim("phoneNumber", user.PhoneNumber ?? "")
         };
 
+        // Add roles to claims
         var roles = _userManager.GetRolesAsync(user).Result;
-        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(_configuration["Jwt:RoleClaimType"], role));
+        }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var expires = DateTime.Now.AddDays(int.Parse(_configuration["Jwt:ExpirationInDays"]));
 
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddHours(1),
+            expires: expires,
             signingCredentials: creds
         );
 

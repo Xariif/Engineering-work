@@ -13,7 +13,6 @@ namespace backend.Database
 
         public DbSet<Mall> Malls { get; set; }
         public DbSet<Tenant> Tenants { get; set; }
-        public DbSet<TurnoverPeriod> TurnoverPeriods { get; set; }
         public DbSet<Turnover> Turnovers { get; set; }
         public DbSet<Access> Accesses { get; set; }
         public DbSet<Newsletter> Newsletters { get; set; }
@@ -30,21 +29,13 @@ namespace backend.Database
                 .HasForeignKey(s => s.MallId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Tenant → TurnoverPeriod (One-to-Many)
-            builder
-                .Entity<TurnoverPeriod>()
-                .HasOne(tp => tp.Tenant)
-                .WithMany(s => s.TurnoverPeriods)
-                .HasForeignKey(tp => tp.TenantId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             // Turnover → User (Many-to-One)
             builder
                 .Entity<Turnover>()
                 .HasOne(u => u.User)
                 .WithMany(u => u.Turnovers)
                 .HasForeignKey(t => t.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Access → User (Many-to-One)
             builder

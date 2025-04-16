@@ -18,6 +18,7 @@ public class Mall
 
 public class Store
 {
+    public int Id { get; set; }
     public string Name { get; set; }
     public string ImageUrl { get; set; }
     public List<Access> Accesses { get; set; } = new List<Access>();
@@ -25,6 +26,7 @@ public class Store
 
 public class Access
 {
+    public int Id { get; set; }
     public string UserId { get; set; }
     public string UserName { get; set; }
     public string UserEmail { get; set; }
