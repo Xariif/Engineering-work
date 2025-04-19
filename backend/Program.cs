@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-                .WithOrigins("http://localhost:5173")
+                .WithOrigins("http://localhost:3000")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
@@ -109,11 +109,17 @@ builder
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Configure Database Context
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException(
+        "Connection string 'DefaultConnection' not found in configuration."
+    );
+}
+
 builder
     .Services.AddEntityFrameworkNpgsql()
-    .AddDbContext<ApplicationDbContext>(options =>
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-    );
+    .AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
 // Configure Services
 builder.Services.AddScoped<AccountService>();

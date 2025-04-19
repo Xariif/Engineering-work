@@ -1,9 +1,56 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-
-    ]
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Run: .NET Core Backend",
+			"type": "coreclr",
+			"request": "launch",
+			"preLaunchTask": "dotnet: build",
+			"program": "${workspaceFolder}/backend/bin/Debug/net8.0/backend.dll",
+			"cwd": "${workspaceFolder}/backend",
+			"env": {
+				"ASPNETCORE_ENVIRONMENT": "Development"
+			},
+			"console": "internalConsole"
+		},
+		{
+			"name": "Run: Deno Frontend",
+			"type": "node",
+			"request": "launch",
+			"preLaunchTask": "npm: dev - frontend",
+			"cwd": "${workspaceFolder}/frontend",
+			"runtimeExecutable": "deno",
+			"runtimeArgs": ["run", "-A", "--inspect-brk=127.0.0.1:53394", "--node-modules-dir", "npm:vite"],
+			"args": ["--port", "3000"],
+			"console": "internalConsole",
+			"restart": true,
+			"timeout": 20000
+		},
+		{
+			"name": "Attach: Deno Frontend",
+			"type": "pwa-node",
+			"request": "attach",
+			"port": 53394
+		},
+		{
+			"name": "Run: Full Stack (Backend + Frontend)",
+			"type": "coreclr",
+			"request": "launch",
+			"preLaunchTask": "dotnet: build",
+			"program": "${workspaceFolder}/backend/bin/Debug/net8.0/backend.dll",
+			"cwd": "${workspaceFolder}/backend",
+			"env": {
+				"ASPNETCORE_ENVIRONMENT": "Development"
+			},
+			"console": "internalConsole",
+			"postDebugTask": "npm: dev - frontend"
+		}
+	],
+	"compounds": [
+		{
+			"name": "Backend + Frontend",
+			"configurations": ["Run: .NET Core Backend", "Run: Deno Frontend"],
+			"stopAll": true
+		}
+	]
 }
