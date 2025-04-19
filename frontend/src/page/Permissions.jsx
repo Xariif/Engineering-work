@@ -68,8 +68,6 @@ const Permissions = () => {
 				}))
 			}));
 
-			console.log(processedMalls);
-
 			setMalls(processedMalls);
 			if (!selectedMall && processedMalls.length > 0) {
 				setSelectedMall(processedMalls[0].id);

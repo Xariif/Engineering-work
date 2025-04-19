@@ -11,36 +11,24 @@
 			"env": {
 				"ASPNETCORE_ENVIRONMENT": "Development"
 			},
-			"console": "internalConsole"
+			"console": "integratedTerminal"
 		},
 		{
 			"name": "Run: Frontend",
-			"type": "node-terminal",
+			"type": "node",
 			"request": "launch",
 			"cwd": "${workspaceFolder}/frontend",
-			"command": "npm start",
-			"preLaunchTask": "kill-port-3000"
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run", "dev"],
+			"preLaunchTask":  "prep-frontend",
+			"console": "integratedTerminal",
+			
 		},
-		{
-			"name": "Run: Full Stack (Backend + Frontend)",
-			"type": "coreclr",
-			"request": "launch",
-			"preLaunchTask": "prep-backend",
-			"program": "${workspaceFolder}/backend/bin/Debug/net8.0/backend.dll",
-			"cwd": "${workspaceFolder}/backend",
-			"env": {
-				"ASPNETCORE_ENVIRONMENT": "Development"
-			},
-			"console": "internalConsole",
-			"postDebugTask": "npm: dev - frontend"
-		}
 	],
 	"compounds": [
 		{
 			"name": "Backend + Frontend",
 			"configurations": ["Run: .NET Core Backend", "Run: Frontend"],
-			"stopAll": true,
-			"preLaunchTask": "kill-port-5000"
-		}
+			"stopAll": true		}
 	]
 }

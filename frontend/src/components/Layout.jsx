@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { AppBar, Toolbar, Typography, Box, Container, Button, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
-import { Link, Outlet } from "react-router-dom";
+import { AppBar, Toolbar, Typography, Box, Container, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText, Tooltip } from "@mui/material";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -11,11 +11,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import SecurityIcon from "@mui/icons-material/Security";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
-import { Brightness4, Brightness7 } from '@mui/icons-material';
+import { Brightness4, Brightness7 } from "@mui/icons-material";
 
 const Layout = ({ onThemeToggle, themeMode }) => {
 	const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 	const [drawerOpen, setDrawerOpen] = useState(false);
+	const location = useLocation();
 
 	// Get user role from localStorage
 	const userDetails = JSON.parse(localStorage.getItem("userDetails") || "{}");
@@ -24,54 +25,97 @@ const Layout = ({ onThemeToggle, themeMode }) => {
 	// Define navigation links based on user role
 	const navLinks = [
 		{ to: "/", icon: <DashboardIcon />, label: "Dashboard" },
-		{ to: "/turnover", icon: <TrendingUpIcon />, label: "Turnover" },
+		...(userRole === "Tenant" ? [{ to: "/turnover", icon: <TrendingUpIcon />, label: "Turnover" }] : []),
+		...(userRole === "Manager"
+			? [
+					{ to: "/reports", icon: <BarChartIcon />, label: "Reports" },
+					{ to: "/permissions", icon: <SecurityIcon />, label: "Permissions" },
+					{ to: "/turnover-manager", icon: <TrendingUpIcon />, label: "Turnover Manager" },
+			  ]
+			: []),
 		{ to: "/profile", icon: <PersonIcon />, label: "Profile" },
-		...(userRole === "Manager" ? [
-			{ to: "/reports", icon: <BarChartIcon />, label: "Reports" },
-			{ to: "/permissions", icon: <SecurityIcon />, label: "Permissions" }
-		] : []),
-		{ to: "/logout", icon: <LogoutIcon />, label: "Logout" },
+		{ to: "/logout", icon: <LogoutIcon /> },
 	];
 
 	return (
 		<Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
 			<AppBar position="static">
-				<Container maxWidth="lg" sx={{borderRadius: 'none'}}>
+				<Container maxWidth="lg" sx={{ borderRadius: "none" }}>
 					<Toolbar>
-						<IconButton edge="start" color="inherit" component={Link} to="/" sx={{ mr: 2 }}>
-							<HomeIcon />
-						</IconButton>
-						<Typography variant="h6" sx={{ flexGrow: 1 }}>
-							Engineering Work
-						</Typography>
-						<Tooltip title={`Switch to ${themeMode === 'light' ? 'dark' : 'light'} mode`}>
-							<IconButton onClick={onThemeToggle} color="inherit">
-								{themeMode === 'light' ? <Brightness4 /> : <Brightness7 />}
+						<Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+							<IconButton 
+								edge="start" 
+								color="inherit" 
+								component={Link} 
+								to="/" 
+								sx={{ mr: 2 }}
+							>
+								<HomeIcon />
+							</IconButton>
+							<Typography variant="h6" component="div">
+								Engineering Work
+							</Typography>
+						</Box>
+						
+						<Tooltip title={`Switch to ${themeMode === "light" ? "dark" : "light"} mode`}>
+							<IconButton onClick={onThemeToggle} color="inherit" sx={{ mx: 1 }}>
+								{themeMode === "light" ? <Brightness4 /> : <Brightness7 />}
 							</IconButton>
 						</Tooltip>
+						
 						{isSmallScreen ? (
 							<>
 								<IconButton color="inherit" onClick={() => setDrawerOpen(true)}>
 									<MenuIcon />
 								</IconButton>
 								<Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-									<List>
+									<List sx={{ width: 250 }}>
 										{navLinks.map((link) => (
-											<ListItem button component={Link} to={link.to} key={link.label} onClick={() => setDrawerOpen(false)}>
-												<ListItemIcon>{link.icon}</ListItemIcon>
-												<ListItemText primary={link.label} />
+											<ListItem 
+												button 
+												component={Link} 
+												to={link.to} 
+												key={link.to} 
+												onClick={() => setDrawerOpen(false)}
+												sx={{ 
+													backgroundColor: location.pathname === link.to ? 'rgba(0, 0, 0, 0.08)' : 'transparent',
+													"&:hover": { backgroundColor: 'rgba(0, 0, 0, 0.12)' } 
+												}}
+											>
+												<ListItemIcon sx={{ minWidth: 40, color: location.pathname === link.to ? 'primary.main' : 'inherit' }}>
+													{link.icon}
+												</ListItemIcon>
+												<ListItemText 
+													primary={link.label} 
+													primaryTypographyProps={{ 
+														fontWeight: location.pathname === link.to ? 'bold' : 'normal' 
+													}} 
+												/>
 											</ListItem>
 										))}
 									</List>
 								</Drawer>
 							</>
 						) : (
-							navLinks.map((link) => (
-								<Button color="inherit" component={Link} to={link.to} key={link.label}>
-									{link.icon}
-									{link.label}
-								</Button>
-							))
+							<Box sx={{ display: 'flex' }}>
+								{navLinks.map((link, index) => (
+									<Tooltip title={link.label} key={link.to}>
+										<IconButton 
+											color="inherit" 
+											component={Link} 
+											to={link.to} 
+											sx={{ 
+												mx: 0.5,
+												...(link.to === "/logout"  && { ml: 3 }),
+												backgroundColor: location.pathname === link.to ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+												"&:hover": { backgroundColor: 'rgba(255, 255, 255, 0.25)' },
+											}}
+										>
+											{link.icon}
+										</IconButton>
+									</Tooltip>
+								))}
+							</Box>
 						)}
 					</Toolbar>
 				</Container>

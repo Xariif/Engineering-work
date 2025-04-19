@@ -48,32 +48,6 @@
       }
     },
     {
-      "label": "npm: dev - frontend",
-      "type": "shell",
-      "command": "cd ${workspaceFolder}/frontend && npm run dev",
-      "dependsOn": ["kill-port-3000"],
-      "isBackground": true,
-      "problemMatcher": {
-        "owner": "vite",
-        "pattern": {
-          "regexp": "^.*$"
-        },
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": ".*",
-          "endsPattern": "ready in.*"
-        }
-      },
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      },
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
       "label": "dotnet: build",
       "command": "dotnet",
       "type": "process",
@@ -86,16 +60,13 @@
       "problemMatcher": "$msCompile"
     },
     {
-      "label": "dotnet: run with port kill",
-      "dependsOn": ["kill-port-5000", "dotnet: build"],
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "run",
-        "--project",
-        "${workspaceFolder}/backend/backend.csproj"
-      ],
-      "problemMatcher": "$msCompile"
+      "label": "prep-frontend",
+      "dependsOrder": "sequence",
+      "dependsOn": ["kill-port-3000", "kill-port-9229"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
     }
   ]
 } 

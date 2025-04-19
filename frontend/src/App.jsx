@@ -14,7 +14,8 @@ import ForgotPassword from "./page/ForgotPassword.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import { useState, useEffect } from "react";
 import { AuthProvider } from "./context/AuthContext.jsx";
-import Profile from './page/Profile';
+import Profile from './page/Profile.jsx';
+import TurnoverManager from "./page/TurnoverManager.jsx";
 
 const getDesignTokens = (mode) => ({
     palette: {
@@ -232,7 +233,9 @@ function App() {
 
     const toggleColorMode = () => {
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-    };
+        };
+
+    const userRole = JSON.parse(localStorage.getItem('userDetails') || '{}').role;
 
     return (
         <AuthProvider>
@@ -247,8 +250,17 @@ function App() {
                         }
                     >
                         <Route path="/" element={<Dashboard />} />
-                        <Route path="/permissions" element={<Permissions />} />
-                        <Route path="/turnover" element={<Turnover />} />
+                        {userRole === "Manager" && (
+                            <>
+                                <Route path="/turnover-manager" element={<TurnoverManager />} />
+                                <Route path="/permissions" element={<Permissions />} />
+                            </>
+                        )}
+                        {userRole === "Tenant" && (
+                            <>          
+                                <Route path="/turnover" element={<Turnover />} />
+                            </>
+                        )}
                         <Route path="/profile" element={<Profile />} />
                     </Route>
                     <Route path="/login" element={<Login />} />

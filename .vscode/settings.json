@@ -1,8 +1,3 @@
 {
-  "omnisharp.useModernNet": true,
-  "omnisharp.sdkPath": "/usr/local/share/dotnet/sdk/8.0.100",
-  "dotnet.defaultSolution": "backend/backend.sln",
-  "dotnet.server.useOmnisharp": true,
-  "dotnet.server.path": "/usr/local/share/dotnet/dotnet",
   "deno.enable": true
 }
