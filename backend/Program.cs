@@ -20,7 +20,8 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-                .WithOrigins("http://localhost:3000")
+                .WithOrigins(
+                    "http://localhost:3000")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
@@ -86,6 +87,19 @@ builder
             ClockSkew = TimeSpan.Zero,
             RoleClaimType = builder.Configuration["Jwt:RoleClaimType"],
             NameClaimType = builder.Configuration["Jwt:NameClaimType"],
+        };
+        
+        // Handle preflight requests
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                if (context.Request.Method.Equals("OPTIONS", StringComparison.OrdinalIgnoreCase))
+                {
+                    context.Token = String.Empty;
+                }
+                return Task.CompletedTask;
+            }
         };
     });
 

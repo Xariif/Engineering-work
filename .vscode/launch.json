@@ -5,7 +5,7 @@
 			"name": "Run: .NET Core Backend",
 			"type": "coreclr",
 			"request": "launch",
-			"preLaunchTask": "dotnet: build",
+			"preLaunchTask": "prep-backend",
 			"program": "${workspaceFolder}/backend/bin/Debug/net8.0/backend.dll",
 			"cwd": "${workspaceFolder}/backend",
 			"env": {
@@ -14,29 +14,18 @@
 			"console": "internalConsole"
 		},
 		{
-			"name": "Run: Deno Frontend",
-			"type": "node",
+			"name": "Run: Frontend",
+			"type": "node-terminal",
 			"request": "launch",
-			"preLaunchTask": "npm: dev - frontend",
 			"cwd": "${workspaceFolder}/frontend",
-			"runtimeExecutable": "deno",
-			"runtimeArgs": ["run", "-A", "--inspect-brk=127.0.0.1:53394", "--node-modules-dir", "npm:vite"],
-			"args": ["--port", "3000"],
-			"console": "internalConsole",
-			"restart": true,
-			"timeout": 20000
-		},
-		{
-			"name": "Attach: Deno Frontend",
-			"type": "pwa-node",
-			"request": "attach",
-			"port": 53394
+			"command": "npm start",
+			"preLaunchTask": "kill-port-3000"
 		},
 		{
 			"name": "Run: Full Stack (Backend + Frontend)",
 			"type": "coreclr",
 			"request": "launch",
-			"preLaunchTask": "dotnet: build",
+			"preLaunchTask": "prep-backend",
 			"program": "${workspaceFolder}/backend/bin/Debug/net8.0/backend.dll",
 			"cwd": "${workspaceFolder}/backend",
 			"env": {
@@ -49,8 +38,9 @@
 	"compounds": [
 		{
 			"name": "Backend + Frontend",
-			"configurations": ["Run: .NET Core Backend", "Run: Deno Frontend"],
-			"stopAll": true
+			"configurations": ["Run: .NET Core Backend", "Run: Frontend"],
+			"stopAll": true,
+			"preLaunchTask": "kill-port-5000"
 		}
 	]
 }

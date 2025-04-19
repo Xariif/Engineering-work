@@ -2,9 +2,56 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "kill-port-5000",
+      "type": "shell",
+      "command": "lsof -i :5000 | awk 'NR>1 {print $2}' | xargs -r kill -9",
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "kill-port-3000",
+      "type": "shell",
+      "command": "lsof -i :3000 | awk 'NR>1 {print $2}' | xargs -r kill -9",
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "kill-port-9229",
+      "type": "shell",
+      "command": "lsof -i :9229 | awk 'NR>1 {print $2}' | xargs -r kill -9",
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "dotnet: restore",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "restore",
+        "${workspaceFolder}/backend/backend.csproj"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "prep-backend",
+      "dependsOrder": "sequence",
+      "dependsOn": ["kill-port-5000", "dotnet: restore", "dotnet: build"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
       "label": "npm: dev - frontend",
       "type": "shell",
       "command": "cd ${workspaceFolder}/frontend && npm run dev",
+      "dependsOn": ["kill-port-3000"],
       "isBackground": true,
       "problemMatcher": {
         "owner": "vite",
@@ -32,9 +79,21 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/backend/backend.sln",
+        "${workspaceFolder}/backend/backend.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "dotnet: run with port kill",
+      "dependsOn": ["kill-port-5000", "dotnet: build"],
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}/backend/backend.csproj"
       ],
       "problemMatcher": "$msCompile"
     }
