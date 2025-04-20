@@ -1,21 +1,9 @@
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
-import Dashboard from "./page/Dashboard.jsx";
-import Login from "./page/Login.jsx";
-import NotFound from "./page/NotFound.jsx";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Layout from "./components/Layout.jsx";
-import Register from "./page/Register.jsx";
-import Permissions from "./page/Permissions.jsx";
-import Turnover from "./page/Turnover.jsx";
-import Logout from "./page/Logout.jsx";
-import ForgotPassword from "./page/ForgotPassword.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import { useState, useEffect } from "react";
 import { AuthProvider } from "./context/AuthContext.jsx";
-import Profile from './page/Profile.jsx';
-import TurnoverManager from "./page/TurnoverManager.jsx";
+import { useTheme } from "./context/ThemeContext.jsx";
+import AppRoutes from "./routes/AppRoutes.jsx";
 
 const getDesignTokens = (mode) => ({
     palette: {
@@ -220,55 +208,14 @@ const getDesignTokens = (mode) => ({
 });
 
 function App() {
-    const [mode, setMode] = useState(() => {
-        const savedMode = localStorage.getItem('themeMode');
-        return savedMode || 'light';
-    });
-
-    useEffect(() => {
-        localStorage.setItem('themeMode', mode);
-    }, [mode]);
-
+    const { mode } = useTheme();
     const theme = createTheme(getDesignTokens(mode));
-
-    const toggleColorMode = () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-        };
-
-    const userRole = JSON.parse(localStorage.getItem('userDetails') || '{}').role;
 
     return (
         <AuthProvider>
             <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <Routes>
-                    <Route
-                        element={
-                            <ProtectedRoute>
-                                <Layout onThemeToggle={toggleColorMode} themeMode={mode} />
-                            </ProtectedRoute>
-                        }
-                    >
-                        <Route path="/" element={<Dashboard />} />
-                        {userRole === "Manager" && (
-                            <>
-                                <Route path="/turnover-manager" element={<TurnoverManager />} />
-                                <Route path="/permissions" element={<Permissions />} />
-                            </>
-                        )}
-                        {userRole === "Tenant" && (
-                            <>          
-                                <Route path="/turnover" element={<Turnover />} />
-                            </>
-                        )}
-                        <Route path="/profile" element={<Profile />} />
-                    </Route>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/logout" element={<Logout />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
+                <AppRoutes />
             </ThemeProvider>
         </AuthProvider>
     );

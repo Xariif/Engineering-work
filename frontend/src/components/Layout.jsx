@@ -12,6 +12,7 @@ import SecurityIcon from "@mui/icons-material/Security";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
 import { Brightness4, Brightness7 } from "@mui/icons-material";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Layout = ({ onThemeToggle, themeMode }) => {
 	const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
@@ -21,6 +22,9 @@ const Layout = ({ onThemeToggle, themeMode }) => {
 	// Get user role from localStorage
 	const userDetails = JSON.parse(localStorage.getItem("userDetails") || "{}");
 	const userRole = userDetails.role || "";
+
+	//get user from auth context
+	const { user } = useAuth();
 
 	// Define navigation links based on user role
 	const navLinks = [

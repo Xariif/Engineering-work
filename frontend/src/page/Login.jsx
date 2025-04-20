@@ -1,40 +1,28 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Container, Link } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import accountService from "../services/accountService.js";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
+    const auth = useAuth();
     const navigate = useNavigate();
     const { showToast } = useToast();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        accountService
-            .login(email, password)
-            .then((response) => {
-                localStorage.setItem("authToken", response.token);
-                localStorage.setItem(
-                    "userDetails",
-                    JSON.stringify({
-                        firstName: response.firstName,
-                        lastName: response.lastName,
-                        phoneNumber: response.phoneNumber,
-                        email: response.email,
-                        role: response.role,
-                    })
-                );
-                navigate("/");
-                showToast("Login successful", "success");
-            })
-            .catch((error) => {
-                const errorMessage = error.message || "An error occurred during login.";
-                showToast(errorMessage, "error");
-            });
+        
+        try {
+            await auth.login(email, password);
+            showToast('Login successful', 'success');
+            navigate('/');
+        } catch (error) {
+            console.error('Login error:', error);
+            showToast(error.message || 'Login failed. Please try again.', 'error');
+        }
     };
 
     return (
@@ -96,7 +84,7 @@ const Login = () => {
                 </Button>
                 <Link
                     variant="body2"
-                    sx={{ textAlign: "center", marginTop: 1, color: "primary.main", textDecoration: "none" }}
+                    sx={{ textAlign: "center", marginTop: 1, color: "primary.main", textDecoration: "none", cursor: "pointer" }}
                     onClick={() => navigate("/forgot-password")}
                 >
                     Forgot Password?
@@ -105,7 +93,7 @@ const Login = () => {
                     Don't have an account?{" "}
                     <Link
                         variant="body2"
-                        sx={{ color: "primary.main", textDecoration: "none" }}
+                        sx={{ color: "primary.main", textDecoration: "none", cursor: "pointer" }}
                         onClick={() => navigate("/register")}
                     >
                         Register
