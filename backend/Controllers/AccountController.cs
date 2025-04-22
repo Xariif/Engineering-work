@@ -1,9 +1,11 @@
+using System.Security.Claims;
+using backend.Database;
 using backend.Models.Account.Request;
 using backend.Models.Account.Response;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace backend.Controllers
 {
@@ -12,14 +14,20 @@ namespace backend.Controllers
     public class AccountController : BaseController
     {
         private readonly AccountService _accountService;
+        private readonly CustomEmailSender _emailSender;
+        private readonly UserManager<User> _userManager;
 
         public AccountController(
             IConfiguration configuration,
-            AccountService accountService
+            AccountService accountService,
+            CustomEmailSender emailSender,
+            UserManager<User> userManager
         )
             : base(configuration)
         {
             _accountService = accountService;
+            _emailSender = emailSender;
+            _userManager = userManager;
         }
 
         [HttpPost("login")]
@@ -41,7 +49,24 @@ namespace backend.Controllers
         {
             try
             {
-                var response = await _accountService.RegisterAsync(request);
+                var user = await _accountService.RegisterAsync(request);
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                await _emailSender.SendConfirmationLinkAsync(user, request.Email, token);
+                
+                return Ok(new { Message = "Registration successful. Please check your email to activate your account." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [HttpPost("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailRequest request)
+        {
+            try
+            {
+                var response = await _accountService.ConfirmEmailAsync(request);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -50,13 +75,43 @@ namespace backend.Controllers
             }
         }
 
+        [HttpPost("resend-confirmation-email")]
+        public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResetPasswordRequest request)
+        {
+            try
+            {
+                var token = await _accountService.GenerateEmailConfirmationTokenAsync(request.Email);
+                var user = await _accountService.GetUserByEmailAsync(request.Email);
+                
+                await _emailSender.SendConfirmationLinkAsync(user, request.Email, token);
+                
+                return Ok(new { Message = "Confirmation email sent successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
         [HttpPost("generate-password-reset-token")]
-        public async Task<IActionResult> GeneratePasswordResetToken([FromBody] ResetPasswordRequest request)
+        public async Task<IActionResult> GeneratePasswordResetToken(
+            [FromBody] ResetPasswordRequest request
+        )
         {
             try
             {
                 var response = await _accountService.GeneratePasswordResetTokenAsync(request);
-                return Ok(response);
+
+                if (response == null)
+                {
+                    return Ok(new { Token = response });
+                }
+
+                var user = await _accountService.GetUserByEmailAsync(request.Email);
+
+                await _emailSender.SendPasswordResetLinkAsync(user, request.Email, response);
+
+                return Ok(new { Token = "" });
             }
             catch (Exception ex)
             {
@@ -78,20 +133,22 @@ namespace backend.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPost("change-email")]
-        public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailRequest request)
-        {
-            try
-            {
-                var response = await _accountService.ChangeEmailAsync(request);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Message = ex.Message });
-            }
-        }
+        /*  
+          [Authorize]
+          [HttpPost("change-email")]
+          public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailRequest request)
+          {
+              try
+              {
+                  var response = await _accountService.ChangeEmailAsync(request);
+                  return Ok(response);
+              }
+              catch (Exception ex)
+              {
+                  return BadRequest(new { Message = ex.Message });
+              }
+          }
+         */
 
         [Authorize]
         [HttpGet("profile")]

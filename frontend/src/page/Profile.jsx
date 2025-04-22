@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useToast } from '../context/ToastContext';
-import userService from '../services/userService';
+import { useAuth } from '../context/AuthContext.jsx';
+import { useToast } from '../context/ToastContext.jsx';
+import userService from '../services/userService.js';
 import {
     Box,
     Paper,
@@ -300,7 +300,6 @@ const Profile = () => {
                                 display: 'flex',
                                 justifyContent: 'flex-end',
                                 zIndex: 1,
-                                boxShadow: '0 -4px 12px rgba(0,0,0,0.05)'
                             }}
                         >
                             <Button

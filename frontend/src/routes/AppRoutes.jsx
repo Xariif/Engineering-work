@@ -14,7 +14,9 @@ import Login from '../page/Login.jsx';
 import Register from '../page/Register.jsx';
 import Logout from '../page/Logout.jsx';
 import ForgotPassword from '../page/ForgotPassword.jsx';
+import ResetPassword from '../page/ResetPassword.jsx';
 import NotFound from '../page/NotFound.jsx';
+import ConfirmAccount from '../page/ConfirmAccount.jsx';
 
 const AppRoutes = () => {
     const { user } = useAuth();
@@ -50,6 +52,8 @@ const AppRoutes = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/confirm-account" element={<ConfirmAccount />} />
             </Route>
             
             {/* Special routes */}

@@ -15,6 +15,14 @@ const userService = {
             newPassword,
             confirmPassword
         });
+    },
+
+    generatePasswordResetToken: async (email) => {
+        return await apiService.post("account/generate-password-reset-token", { email });
+    },
+
+    resetPassword: async (token, newPassword, confirmPassword, email) => {
+        return await apiService.post("account/reset-password", { token, newPassword, confirmPassword, email });
     }
 };
 

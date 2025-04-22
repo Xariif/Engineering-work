@@ -5,6 +5,7 @@ using System.Text;
 using backend.Database;
 using backend.Models.Account.Request;
 using backend.Models.Account.Response;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -59,7 +60,7 @@ public class AccountService : BaseService
         };
     }
 
-    public async Task<RegisterResponse> RegisterAsync(RegisterRequest request)
+    public async Task<User> RegisterAsync(RegisterRequest request)
     {
         if (request.Password != request.ConfirmPassword)
         {
@@ -82,25 +83,35 @@ public class AccountService : BaseService
             throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
         }
 
-        return new RegisterResponse
-        {
-            Message = "Registration successful"
-        };
+        return user;
     }
 
-    public async Task<ResetPasswordResponse> GeneratePasswordResetTokenAsync(ResetPasswordRequest request)
+    public async Task<string?> GeneratePasswordResetTokenAsync(ResetPasswordRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        var user = _context.Users.FirstOrDefault(x => x.Email == request.Email);
+        if (user == null || !user.IsActive)
+        {
+            return null;
+        }
+
+        
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+
+        //save token to validate it late on 
+        
+        return token;
+    }
+
+    public async Task<User> GetUserByEmailAsync(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
         if (user == null || !user.IsActive)
         {
             throw new Exception("User not found or account is inactive");
         }
-
-        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-        return new ResetPasswordResponse
-        {
-            Token = token
-        };
+        return user;
     }
 
     public async Task<SetNewPasswordResponse> ResetPasswordAsync(SetNewPasswordRequest request)
@@ -198,7 +209,7 @@ public class AccountService : BaseService
         }
 
         // Validate phone number if provided
-        if (!string.IsNullOrWhiteSpace(request.PhoneNumber) && 
+        if (!string.IsNullOrWhiteSpace(request.PhoneNumber) &&
             !System.Text.RegularExpressions.Regex.IsMatch(request.PhoneNumber, @"^\d{9}$"))
         {
             throw new Exception("Phone number must be exactly 9 digits");
@@ -264,5 +275,45 @@ public class AccountService : BaseService
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public async Task<string> GenerateEmailConfirmationTokenAsync(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null || !user.IsActive)
+        {
+            throw new Exception("User not found or account is inactive");
+        }
+
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        return token;
+    }
+
+    public async Task<ConfirmEmailResponse> ConfirmEmailAsync(ConfirmEmailRequest request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+
+        var result = await _userManager.ConfirmEmailAsync(user, request.Token);
+        if (!result.Succeeded)
+        {
+            throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+        }
+
+        user.IsActive = true;
+
+        var updateResult = await _userManager.UpdateAsync(user);
+        if (!updateResult.Succeeded)
+        {
+            throw new Exception(string.Join(", ", updateResult.Errors.Select(e => e.Description)));
+        }
+
+        return new ConfirmEmailResponse
+        {
+            Message = "Email confirmed successfully"
+        };
     }
 }

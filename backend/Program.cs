@@ -120,7 +120,8 @@ builder
     {
         options.SignIn.RequireConfirmedAccount = false;
     })
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 // Configure Database Context
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -139,7 +140,7 @@ builder
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<AccessService>();
 builder.Services.AddScoped<TurnoverService>();
-builder.Services.AddSingleton<IEmailSender<User>, NoOpEmailSender>();
+builder.Services.AddScoped<CustomEmailSender>();
 
 var app = builder.Build();
 
@@ -147,7 +148,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.ApplyMigrations();
+    // app.ApplyMigrations(); // Comment out to avoid PostgreSQL file permission errors
 }
 
 // Use CORS policy
@@ -159,11 +160,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-// Seed roles
-using (var scope = app.Services.CreateScope())
-{
-    await RoleSeeder.SeedRolesAsync(scope.ServiceProvider);
-}
 
 app.Run();

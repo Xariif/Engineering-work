@@ -3,22 +3,27 @@ import { Box, Button, TextField, Typography, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined"; // Import the arrow icon
+import userService from "../services/userService.js";
+import { useToast } from "../context/ToastContext.jsx";
 
 const ForgotPassword = () => {
 	const [email, setEmail] = useState("");
+
+	const { showToast } = useToast();
 
 	const navigate = useNavigate();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
-		navigate("/login");
-
-		setEmail("");
+		userService
+			.generatePasswordResetToken(email)
+			.finally(() => {
+				showToast("Password reset link sent to email", "success");
+				setEmail("");
+			});
 	};
 
 	const handleBack = () => {
-		// Navigate back to the previous page or login page
 		navigate("/login");
 	};
 
@@ -34,7 +39,6 @@ const ForgotPassword = () => {
 		>
 			<Box
 				component="form"
-				onSubmit={handleSubmit}
 				sx={{
 					display: "flex",
 					flexDirection: "column",
@@ -64,16 +68,10 @@ const ForgotPassword = () => {
 					Enter your email address and we'll send you a link to reset your password.
 				</Typography>
 				<TextField label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required fullWidth />
-				<Button type="submit" variant="contained" color="primary" fullWidth>
+				<Button variant="contained" color="primary" fullWidth onClick={handleSubmit}>
 					Send Reset Link
 				</Button>
-				<Button
-					variant="outlined"
-					color="secondary"
-					fullWidth
-					onClick={handleBack}
-					startIcon={<ArrowBackIosNewOutlinedIcon />} // Add the arrow icon
-				>
+				<Button variant="outlined" color="secondary" fullWidth onClick={handleBack} startIcon={<ArrowBackIosNewOutlinedIcon />}>
 					Back
 				</Button>
 			</Box>
