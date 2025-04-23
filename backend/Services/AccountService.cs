@@ -8,6 +8,7 @@ using backend.Models.Account.Response;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Services;
@@ -36,14 +37,30 @@ public class AccountService : BaseService
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null || !user.IsActive)
+
+        // More specific error messages based on user status
+        if (user == null)
         {
-            throw new Exception("Invalid login attempt or account is inactive");
+            throw new Exception("No account found with this email address");
+        }
+
+        if (!user.IsActive)
+        {
+            if (!user.EmailConfirmed)
+            {
+                throw new Exception(
+                    "Please activate your account. Check your email for activation instructions or request a new activation link."
+                );
+            }
+
+            throw new Exception(
+                "Your account is currently inactive. Please contact support for assistance."
+            );
         }
 
         if (!await _userManager.CheckPasswordAsync(user, request.Password))
         {
-            throw new Exception("Invalid login attempt");
+            throw new Exception("Invalid password");
         }
 
         var token = GenerateJwtToken(user);
@@ -74,7 +91,7 @@ public class AccountService : BaseService
             Name = request.FirstName,
             Surname = request.LastName,
             PhoneNumber = request.PhoneNumber,
-            IsActive = false
+            IsActive = false,
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
@@ -82,6 +99,9 @@ public class AccountService : BaseService
         {
             throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
         }
+
+        // Assign default tenant role to created user
+        _userManager.AddToRoleAsync(user, "Tenant").Wait();
 
         return user;
     }
@@ -94,14 +114,13 @@ public class AccountService : BaseService
             return null;
         }
 
-        
-
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
+        var urlSafeToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-        //save token to validate it late on 
-        
-        return token;
+        //save token to validate it late on
+
+        return urlSafeToken;
     }
 
     public async Task<User> GetUserByEmailAsync(string email)
@@ -133,10 +152,7 @@ public class AccountService : BaseService
             throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
         }
 
-        return new SetNewPasswordResponse
-        {
-            Message = "Password reset successful"
-        };
+        return new SetNewPasswordResponse { Message = "Password reset successful" };
     }
 
     public async Task<ChangeEmailResponse> ChangeEmailAsync(ChangeEmailRequest request)
@@ -155,10 +171,7 @@ public class AccountService : BaseService
             throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
         }
 
-        return new ChangeEmailResponse
-        {
-            Message = "Email changed successfully"
-        };
+        return new ChangeEmailResponse { Message = "Email changed successfully" };
     }
 
     public async Task<UserProfileResponse> GetProfileAsync(string userId)
@@ -177,11 +190,14 @@ public class AccountService : BaseService
             LastName = user.Surname,
             Email = user.Email,
             PhoneNumber = user.PhoneNumber,
-            Role = roles.FirstOrDefault() ?? "Tenant"
+            Role = roles.FirstOrDefault() ?? "Tenant",
         };
     }
 
-    public async Task<UserProfileResponse> UpdateProfileAsync(string userId, UpdateProfileRequest request)
+    public async Task<UserProfileResponse> UpdateProfileAsync(
+        string userId,
+        UpdateProfileRequest request
+    )
     {
         if (request == null)
         {
@@ -209,8 +225,10 @@ public class AccountService : BaseService
         }
 
         // Validate phone number if provided
-        if (!string.IsNullOrWhiteSpace(request.PhoneNumber) &&
-            !System.Text.RegularExpressions.Regex.IsMatch(request.PhoneNumber, @"^\d{9}$"))
+        if (
+            !string.IsNullOrWhiteSpace(request.PhoneNumber)
+            && !System.Text.RegularExpressions.Regex.IsMatch(request.PhoneNumber, @"^\d{9}$")
+        )
         {
             throw new Exception("Phone number must be exactly 9 digits");
         }
@@ -239,7 +257,7 @@ public class AccountService : BaseService
             LastName = user.Surname,
             Email = user.Email,
             PhoneNumber = user.PhoneNumber,
-            Role = roles.FirstOrDefault() ?? "Tenant"
+            Role = roles.FirstOrDefault() ?? "Tenant",
         };
     }
 
@@ -252,7 +270,7 @@ public class AccountService : BaseService
             new Claim(ClaimTypes.Name, user.Email),
             new Claim("firstName", user.Name ?? ""),
             new Claim("lastName", user.Surname ?? ""),
-            new Claim("phoneNumber", user.PhoneNumber ?? "")
+            new Claim("phoneNumber", user.PhoneNumber ?? ""),
         };
 
         // Add roles to claims
@@ -280,9 +298,9 @@ public class AccountService : BaseService
     public async Task<string> GenerateEmailConfirmationTokenAsync(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        if (user == null || !user.IsActive)
+        if (user == null)
         {
-            throw new Exception("User not found or account is inactive");
+            throw new Exception("User not found");
         }
 
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -311,9 +329,6 @@ public class AccountService : BaseService
             throw new Exception(string.Join(", ", updateResult.Errors.Select(e => e.Description)));
         }
 
-        return new ConfirmEmailResponse
-        {
-            Message = "Email confirmed successfully"
-        };
+        return new ConfirmEmailResponse { Message = "Email confirmed successfully" };
     }
 }

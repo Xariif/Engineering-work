@@ -17,6 +17,7 @@ import ForgotPassword from '../page/ForgotPassword.jsx';
 import ResetPassword from '../page/ResetPassword.jsx';
 import NotFound from '../page/NotFound.jsx';
 import ConfirmAccount from '../page/ConfirmAccount.jsx';
+import ResendActivation from "../page/ResendActivation.jsx";
 
 const AppRoutes = () => {
     const { user } = useAuth();
@@ -54,6 +55,7 @@ const AppRoutes = () => {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/confirm-account" element={<ConfirmAccount />} />
+                <Route path="/resend-activation" element={<ResendActivation />} />
             </Route>
             
             {/* Special routes */}
@@ -65,4 +67,4 @@ const AppRoutes = () => {
     );
 };
 
-export default AppRoutes; 
+export default AppRoutes;

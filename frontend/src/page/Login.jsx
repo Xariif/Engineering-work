@@ -4,6 +4,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import { Link as RouterLink } from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -97,6 +98,12 @@ const Login = () => {
                         onClick={() => navigate("/register")}
                     >
                         Register
+                    </Link>
+                </Typography>
+                <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>
+                    Didn't receive activation email?{" "}
+                    <Link component={RouterLink} to="/resend-activation">
+                        Resend activation email
                     </Link>
                 </Typography>
             </Box>

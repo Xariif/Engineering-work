@@ -9,20 +9,12 @@ const userService = {
         return await apiService.put("account/profile", profileData);
     },
 
-    changePassword: async (currentPassword, newPassword, confirmPassword) => {
-        return await apiService.put("account/password", {
-            currentPassword,
-            newPassword,
-            confirmPassword
-        });
-    },
-
     generatePasswordResetToken: async (email) => {
         return await apiService.post("account/generate-password-reset-token", { email });
     },
 
-    resetPassword: async (token, newPassword, confirmPassword, email) => {
-        return await apiService.post("account/reset-password", { token, newPassword, confirmPassword, email });
+    resetPassword: async (token, password, confirmPassword, email) => {
+        return await apiService.post("account/reset-password", { token, password, confirmPassword, email });
     }
 };
 

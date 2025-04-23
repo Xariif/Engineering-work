@@ -81,7 +81,7 @@ namespace backend.Controllers
             try
             {
                 var token = await _accountService.GenerateEmailConfirmationTokenAsync(request.Email);
-                var user = await _accountService.GetUserByEmailAsync(request.Email);
+                var user = await _userManager.FindByEmailAsync(request.Email);
                 
                 await _emailSender.SendConfirmationLinkAsync(user, request.Email, token);
                 

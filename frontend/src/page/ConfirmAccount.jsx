@@ -4,10 +4,14 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
 import { useToast } from "../context/ToastContext.jsx";
 import apiService from "../services/apiService.js";
+import accountService from "../services/accountService.js";
 
 const ConfirmAccount = () => {
     const [searchParams] = useSearchParams();
-    const token = searchParams.get('token');
+    
+    const rawToken = searchParams.get('token');
+    const token = rawToken ? rawToken.replace(/ /g, '+') : null;
+    
     const email = searchParams.get('email');
     
     const [loading, setLoading] = useState(true);
@@ -26,7 +30,8 @@ const ConfirmAccount = () => {
 
         const confirmEmail = async () => {
             try {
-                await apiService.post("account/confirm-email", { token, email });
+                // This will now send the corrected token with + instead of spaces
+                await accountService.confirmEmail(token, email);
                 setSuccess(true);
                 showToast("Your account has been successfully activated!", "success");
             } catch (error) {
@@ -38,7 +43,7 @@ const ConfirmAccount = () => {
         };
 
         confirmEmail();
-    }, [token, email, showToast]);
+    }, []);
 
     const handleLogin = () => {
         navigate("/login");
@@ -159,4 +164,4 @@ const ConfirmAccount = () => {
     );
 };
 
-export default ConfirmAccount; 
+export default ConfirmAccount;

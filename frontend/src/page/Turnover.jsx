@@ -265,21 +265,7 @@ const Turnover = () => {
               width: "100%",
               "& .MuiDateCalendar-root": {
                 width: "100%",
-                maxWidth: "none",
-                height: "auto",
-                minHeight: { xs: "350px", md: "400px" },
-                overflowY: "visible",
-              },
-              "& .MuiPickersDay-root": {
-                width: "auto",
-                height: "auto",
-                minHeight: "50px",
-                padding: { xs: "4px", sm: "8px" },
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "4px",
+                height: "100%",
               },
               "& .MuiDayCalendar-weekDayLabel": {
                 width: "auto",
@@ -312,6 +298,7 @@ const Turnover = () => {
                 alignItems: "center",
                 mb: 1,
               }}
+              
             >
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                 {new Date().getFullYear()}
@@ -338,6 +325,7 @@ const Turnover = () => {
                 dayOfWeekFormatter={(day) => {
                   return day.toLocaleDateString("en-CA", { weekday: "long" });
                 }}
+                
                 slots={{
                   day: (props) => {
                     const dateString = props.day.toLocaleDateString("en-CA");
