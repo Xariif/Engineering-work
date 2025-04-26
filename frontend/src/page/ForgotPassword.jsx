@@ -71,7 +71,7 @@ const ForgotPassword = () => {
 				<Button variant="contained" color="primary" fullWidth onClick={handleSubmit}>
 					Send Reset Link
 				</Button>
-				<Button variant="outlined" color="secondary" fullWidth onClick={handleBack} startIcon={<ArrowBackIosNewOutlinedIcon />}>
+				<Button color="secondary" fullWidth onClick={handleBack} startIcon={<ArrowBackIosNewOutlinedIcon />}>
 					Back
 				</Button>
 			</Box>

@@ -24,7 +24,7 @@ public class AccessController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Manager")]
+    [Authorize(Policy = "RequireManagerRole")]
     public IActionResult GetAllAccesses()
     {
         var accessData = _accessService.GetAccessData();
@@ -32,7 +32,7 @@ public class AccessController : ControllerBase
     }
 
     [HttpGet("tenant")]
-    [Authorize(Roles = "Tenant")]
+    [Authorize(Policy = "RequireTenantRole")]
     public async Task<IActionResult> GetTenantAccesses()
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -46,7 +46,7 @@ public class AccessController : ControllerBase
     }
 
     [HttpPost("tenant")]
-    [Authorize(Roles = "Manager")]
+    [Authorize(Policy = "RequireManagerRole")]
     public async Task<IActionResult> AddTenantAccess([FromBody] AddAccess request)
     {
         try
@@ -65,7 +65,7 @@ public class AccessController : ControllerBase
     }
 
     [HttpDelete("tenant/{id}")]
-    [Authorize(Roles = "Manager")]
+    [Authorize(Policy = "RequireManagerRole")]
     public async Task<IActionResult> RemoveTenantAccess(int id)
     {
         try

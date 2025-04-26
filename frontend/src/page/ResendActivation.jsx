@@ -4,12 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext.jsx";
 import EmailIcon from "@mui/icons-material/Email";
 import accountService from "../services/accountService.js";
+import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined"; // Import the arrow icon
 
 const ResendActivation = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { showToast } = useToast();
   const navigate = useNavigate();
+
+	const handleBack = () => {
+		navigate("/login");
+	};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,7 +89,6 @@ const ResendActivation = () => {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            variant="outlined"
           />
 
           <Button
@@ -97,13 +101,9 @@ const ResendActivation = () => {
             {isSubmitting ? "Sending..." : "Send Activation Email"}
           </Button>
 
-          <Button
-            variant="text"
-            onClick={() => navigate("/login")}
-            sx={{ textTransform: "none" }}
-          >
-            Back to Login
-          </Button>
+      			<Button  color="secondary" fullWidth onClick={handleBack} startIcon={<ArrowBackIosNewOutlinedIcon />}>
+					Back
+				</Button>
         </Box>
       </Paper>
     </Container>

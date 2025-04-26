@@ -270,8 +270,8 @@ namespace backend.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("store/{storeId}")]
-        [Authorize(Policy = "RequireTenantRole")]
         public async Task<ActionResult<List<TurnoverResponse>>> GetTurnoversByStore(int storeId)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

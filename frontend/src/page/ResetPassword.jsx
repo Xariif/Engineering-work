@@ -124,7 +124,6 @@ const ResetPassword = () => {
                 />
                 
                 <Button 
-                    variant="contained" 
                     color="primary" 
                     type="submit"
                     disabled={isSubmitting}
@@ -134,7 +133,6 @@ const ResetPassword = () => {
                 </Button>
                 
                 <Button 
-                    variant="outlined" 
                     color="secondary" 
                     fullWidth 
                     onClick={handleBack} 

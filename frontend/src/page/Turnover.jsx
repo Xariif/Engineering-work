@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import {
   Box,
   Button,
@@ -31,6 +31,23 @@ const Turnover = () => {
   const [turnoverValue, setTurnoverValue] = useState("");
   const [turnovers, setTurnovers] = useState([]);
   const [selectedTurnoverId, setSelectedTurnoverId] = useState(null);
+
+  // Create a memoized lookup object for turnovers
+  const turnoversByDate = useMemo(() => {
+    const lookup = {};
+    turnovers.forEach(turnover => {
+      try {
+        const date = new Date(turnover.date);
+        if (!isNaN(date.getTime())) {
+          const dateString = date.toLocaleDateString("en-CA");
+          lookup[dateString] = turnover;
+        }
+      } catch (error) {
+        console.error("Error processing turnover date:", error);
+      }
+    });
+    return lookup;
+  }, [turnovers]);
 
   const isDateValid = (date) => {
     const today = new Date();
@@ -91,7 +108,7 @@ const Turnover = () => {
     setSelectedTurnoverId(null);
   };
 
-  const handleDateChange = (date) => {
+  const handleDateChange = useCallback((date) => {
     if (!isDateValid(date)) {
       showToast(
         "Turnover can only be added for the current year and dates not exceeding today",
@@ -101,17 +118,15 @@ const Turnover = () => {
     }
     setSelectedDate(date);
     const dateString = date.toLocaleDateString("en-CA");
-    const turnover = turnovers.find((t) =>
-      new Date(t.date).toLocaleDateString("en-CA") === dateString
-    );
+    const turnover = turnoversByDate[dateString];
     setTurnoverValue(turnover?.value || "");
     setSelectedTurnoverId(turnover?.id || null);
-  };
+  }, [turnoversByDate, showToast]);
 
-  const goToToday = () => {
+  const goToToday = useCallback(() => {
     const today = new Date();
     handleDateChange(today);
-  };
+  }, [handleDateChange]);
 
   const handleTurnoverSubmit = async () => {
     if (!selectedStore || !selectedDate || !turnoverValue) {
@@ -183,6 +198,78 @@ const Turnover = () => {
       );
     }
   };
+
+  // Memoize the day slot renderer
+  const DaySlot = useCallback((props) => {
+    const dateString = props.day.toLocaleDateString("en-CA");
+    const turnover = turnoversByDate[dateString];
+
+    return (
+      <Box
+        sx={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          m: 0.5,
+        }}
+      >
+        <PickersDay
+          {...props}
+          sx={{
+            width: "100% !important",
+            height: "100% !important",
+            borderRadius: "8px !important",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            ...(turnover && {
+              backgroundColor: "rgba(76, 175, 80, 0.1)",
+              "&:hover": {
+                backgroundColor: "rgba(76, 175, 80, 0.2)",
+              },
+              "&.Mui-selected": {
+                backgroundColor: "primary.main",
+              },
+            }),
+          }}
+        >
+          <Typography variant="caption" sx={{ fontWeight: "bold" }}>
+            {props.day.getDate()}
+          </Typography>
+          {turnover && (
+            <Typography 
+              variant="caption"
+              sx={{
+                fontSize: { xs: "0.65rem", sm: "0.7rem" },
+                fontWeight: "normal",
+                lineHeight: 1,
+              }}
+            >
+              {new Intl.NumberFormat("en-CA", {
+                style: "currency",
+                currency: "EUR",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              }).format(turnover.value)}
+            </Typography>
+          )}
+          {!turnover && (
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                opacity: 0,
+                fontSize: { xs: "0.65rem", sm: "0.7rem" },
+                lineHeight: 1,
+              }}
+            >
+              -
+            </Typography>
+          )}
+        </PickersDay>
+      </Box>
+    );
+  }, [turnoversByDate]);
 
   return (
     <Box sx={{ p: 3 }}>
@@ -304,7 +391,6 @@ const Turnover = () => {
                 {new Date().getFullYear()}
               </Typography>
               <Button
-                variant="outlined"
                 size="small"
                 onClick={goToToday}
                 disabled={!selectedStore}
@@ -325,90 +411,8 @@ const Turnover = () => {
                 dayOfWeekFormatter={(day) => {
                   return day.toLocaleDateString("en-CA", { weekday: "long" });
                 }}
-                
                 slots={{
-                  day: (props) => {
-                    const dateString = props.day.toLocaleDateString("en-CA");
-                    const turnover = turnovers.find((t) => {
-                      try {
-                        const turnoverDate = new Date(t.date);
-                        if (isNaN(turnoverDate.getTime())) {
-                          return false;
-                        }
-                        return turnoverDate.toLocaleDateString("en-CA") ===
-                          dateString;
-                      } catch (error) {
-                        console.error("Error processing turnover date:", error);
-                        return false;
-                      }
-                    });
-
-                    return (
-                      <Box
-                        sx={{
-                          position: "relative",
-                          width: "100%",
-                          height: "100%",
-                          m: 0.5,
-                        }}
-                      >
-                        <PickersDay
-                          {...props}
-                          sx={{
-                            width: "100% !important",
-                            height: "100% !important",
-                            borderRadius: "8px !important",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            ...(turnover && {
-                              backgroundColor: "rgba(76, 175, 80, 0.1)",
-                              "&:hover": {
-                                backgroundColor: "rgba(76, 175, 80, 0.2)",
-                              },
-                              "&.Mui-selected": {
-                                backgroundColor: "primary.main",
-                              },
-                            }),
-                          }}
-                        >
-                          <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-                            {props.day.getDate()}
-                          </Typography>
-                          {turnover && (
-                            <Typography 
-                              variant="caption"
-                              sx={{
-                                fontSize: { xs: "0.65rem", sm: "0.7rem" },
-                                fontWeight: "normal",
-                                lineHeight: 1,
-                              }}
-                            >
-                              {new Intl.NumberFormat("en-CA", {
-                                style: "currency",
-                                currency: "EUR",
-                                minimumFractionDigits: 0,
-                                maximumFractionDigits: 0,
-                              }).format(turnover.value)}
-                            </Typography>
-                          )}
-                          {!turnover && (
-                            <Typography 
-                              variant="caption" 
-                              sx={{ 
-                                opacity: 0,
-                                fontSize: { xs: "0.65rem", sm: "0.7rem" },
-                                lineHeight: 1,
-                              }}
-                            >
-                              -
-                            </Typography>
-                          )}
-                        </PickersDay>
-                      </Box>
-                    );
-                  },
+                  day: DaySlot
                 }}
               />
             </LocalizationProvider>
@@ -431,9 +435,7 @@ const Turnover = () => {
               value={turnoverValue}
               onChange={(e) => setTurnoverValue(e.target.value)}
               disabled={!selectedStore}
-              InputProps={{
-                startAdornment: <Typography sx={{ mr: 1 }}>EUR</Typography>,
-              }}
+
             />
             <Box
               sx={{
@@ -454,7 +456,6 @@ const Turnover = () => {
               </Button>
               {selectedTurnoverId && (
                 <Button
-                  variant="outlined"
                   color="error"
                   onClick={handleDeleteTurnover}
                   fullWidth

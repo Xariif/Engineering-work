@@ -149,7 +149,6 @@ const ConfirmAccount = () => {
                             </Button>
                         )}
                         <Button 
-                            variant="outlined" 
                             color="secondary" 
                             fullWidth 
                             onClick={handleLogin}

@@ -43,7 +43,9 @@ const Layout = ({ onThemeToggle, themeMode }) => {
 
 	return (
 		<Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-			<AppBar position="static">
+			<AppBar position="static" 
+			 
+			> 
 				<Container maxWidth="lg" sx={{ borderRadius: "none" }}>
 					<Toolbar>
 						<Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
@@ -56,9 +58,7 @@ const Layout = ({ onThemeToggle, themeMode }) => {
 							>
 								<HomeIcon />
 							</IconButton>
-							<Typography variant="h6" component="div">
-								Engineering Work
-							</Typography>
+			
 						</Box>
 						
 						<Tooltip title={`Switch to ${themeMode === "light" ? "dark" : "light"} mode`}>

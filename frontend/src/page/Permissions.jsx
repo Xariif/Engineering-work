@@ -275,7 +275,7 @@ const Permissions = () => {
 				</Box>
 				<Button
 					variant="outlined"
-					color="error"
+					color="error"					
 					size="small"
 					onClick={() => handleRemoveAccess(access.userEmail, selectedStore.id)}
 				>
@@ -379,10 +379,11 @@ const Permissions = () => {
 					pt: 2,
 					px: 3
 				}}>
-					<Button onClick={handleDialogClose}>Cancel</Button>
+					<Button variant="outlined" color="info" onClick={handleDialogClose}>Cancel</Button>
 					<Button 
 						onClick={handleAddUser} 
-						variant="contained" 
+						variant="outlined" 
+						color="success"
 						disabled={!newUser.trim()}
 					>
 						Add User

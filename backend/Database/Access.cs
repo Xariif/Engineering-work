@@ -20,8 +20,8 @@ namespace Backend.Database
 
     public enum Role
     {
-        Manager,
-        Tenant,
+        Manager = 0,
+        Tenant = 1,
     }
 
     public enum ResourceType

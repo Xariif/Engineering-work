@@ -7,6 +7,7 @@ import PublicRoute from './PublicRoute.jsx';
 import Layout from '../components/Layout.jsx';
 import Dashboard from '../page/Dashboard.jsx';
 import TurnoverManager from '../page/TurnoverManager.jsx';
+import TenantDetail from '../page/TenantDetail.jsx';
 import Permissions from '../page/Permissions.jsx';
 import Turnover from '../page/Turnover.jsx';
 import Profile from '../page/Profile.jsx';
@@ -18,6 +19,7 @@ import ResetPassword from '../page/ResetPassword.jsx';
 import NotFound from '../page/NotFound.jsx';
 import ConfirmAccount from '../page/ConfirmAccount.jsx';
 import ResendActivation from "../page/ResendActivation.jsx";
+import Reports from "../page/Reports.jsx";
 
 const AppRoutes = () => {
     const { user } = useAuth();
@@ -36,7 +38,9 @@ const AppRoutes = () => {
                 <Route path="/" element={<Dashboard />} />
                 {userRole === "Manager" && (
                     <>
+                        <Route path="/reports" element={<Reports />} />
                         <Route path="/turnover-manager" element={<TurnoverManager />} />
+                        <Route path="/tenant/:tenantId" element={<TenantDetail />} />
                         <Route path="/permissions" element={<Permissions />} />
                     </>
                 )}

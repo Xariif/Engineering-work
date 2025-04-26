@@ -123,7 +123,6 @@ const Register = () => {
                     Register
                 </Button>
                 <Button
-                    variant="outlined"
                     color="secondary"
                     fullWidth
                     onClick={handleBack}

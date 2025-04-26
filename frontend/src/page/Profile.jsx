@@ -198,9 +198,8 @@ const Profile = () => {
                                             value={formData.firstName}
                                             onChange={handleChange}
                                             required
-                                            variant="outlined"
                                             InputProps={{
-                                                startAdornment: <BadgeIcon sx={{ mr: 1, color: 'action.active' }} />,
+                                                endAdornment: <BadgeIcon sx={{ color: 'action.active' }} />,
                                             }}
                                             sx={{ 
                                                 '& .MuiOutlinedInput-root': {
@@ -217,9 +216,8 @@ const Profile = () => {
                                             value={formData.lastName}
                                             onChange={handleChange}
                                             required
-                                            variant="outlined"
                                             InputProps={{
-                                                startAdornment: <BadgeIcon sx={{ mr: 1, color: 'action.active' }} />,
+                                                endAdornment: <BadgeIcon sx={{ color: 'action.active' }} />,
                                             }}
                                             sx={{ 
                                                 '& .MuiOutlinedInput-root': {
@@ -251,10 +249,9 @@ const Profile = () => {
                                             name="email"
                                             type="email"
                                             value={formData.email}
-                                            disabled
-                                            variant="outlined"
+                                            disabled                                          
                                             InputProps={{
-                                                startAdornment: <EmailIcon sx={{ mr: 1, color: 'action.active' }} />,
+                                                endAdornment: <EmailIcon sx={{ color: 'action.active' }} />,
                                             }}
                                             sx={{ 
                                                 '& .MuiOutlinedInput-root': {
@@ -270,9 +267,8 @@ const Profile = () => {
                                             name="phoneNumber"
                                             value={formData.phoneNumber}
                                             onChange={handleChange}
-                                            variant="outlined"
                                             InputProps={{
-                                                startAdornment: <PhoneIcon sx={{ mr: 1, color: 'action.active' }} />,
+                                                endAdornment: <PhoneIcon sx={{ color: 'action.active' }} />,
                                             }}
                                             sx={{ 
                                                 '& .MuiOutlinedInput-root': {

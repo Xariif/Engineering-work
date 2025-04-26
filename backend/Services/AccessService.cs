@@ -88,10 +88,28 @@ public class AccessService : BaseService
     public async Task<bool> HasAccessToTenantAsync(string userId, int tenantId)
     {
         // Check if user has specific access to the tenant
-        return await _context.Accesses
+        bool hasDirectAccess = await _context.Accesses
             .AnyAsync(a => a.UserId == userId && 
                          a.ResourceId == tenantId.ToString() && 
                          a.ResourceType == ResourceType.Store);
+        
+        if (hasDirectAccess)
+            return true;
+            
+        // Check if the user is a manager of the mall containing this tenant
+        var tenant = await _context.Tenants
+            .Include(t => t.Mall)
+            .FirstOrDefaultAsync(t => t.Id == tenantId);
+            
+        if (tenant == null)
+            return false;
+            
+        // Check if user is a manager for this mall
+        return await _context.Accesses
+            .AnyAsync(a => a.UserId == userId && 
+                         a.ResourceId == tenant.Mall.Id.ToString() && 
+                         a.ResourceType == ResourceType.Mall && 
+                         a.Role == Role.Manager);
     }
 
     public async Task<IEnumerable<int>> GetAccessibleTenantIdsAsync(string userId)
