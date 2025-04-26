@@ -15,9 +15,9 @@ import {
   Avatar,
   Chip
 } from "@mui/material";
-import { useAuth } from "../context/AuthContext.jsx";
-import { useToast } from "../context/ToastContext.jsx";
-import accessService from "../services/accessService.js";
+import { useAuth } from "../../../context/AuthContext.jsx";
+import { useToast } from "../../../context/ToastContext.jsx";
+import accessService from "../../../services/accessService.js";
 import StoreIcon from '@mui/icons-material/Store';
 import { useNavigate } from "react-router-dom";
 

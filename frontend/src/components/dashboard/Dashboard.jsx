@@ -4,7 +4,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import SecurityIcon from "@mui/icons-material/Security";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { useAuth } from "../context/AuthContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {

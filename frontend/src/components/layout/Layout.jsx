@@ -12,7 +12,7 @@ import SecurityIcon from "@mui/icons-material/Security";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
 import { Brightness4, Brightness7 } from "@mui/icons-material";
-import { useAuth } from "../context/AuthContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 const Layout = ({ onThemeToggle, themeMode }) => {
 	const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
@@ -38,7 +38,7 @@ const Layout = ({ onThemeToggle, themeMode }) => {
 			  ]
 			: []),
 		{ to: "/profile", icon: <PersonIcon />, label: "Profile" },
-		{ to: "/logout", icon: <LogoutIcon /> },
+		{ to: "/logout", icon: <LogoutIcon /> , label: "Logout" },
 	];
 
 	return (
@@ -81,12 +81,9 @@ const Layout = ({ onThemeToggle, themeMode }) => {
 												to={link.to} 
 												key={link.to} 
 												onClick={() => setDrawerOpen(false)}
-												sx={{ 
-													backgroundColor: location.pathname === link.to ? 'rgba(0, 0, 0, 0.08)' : 'transparent',
-													"&:hover": { backgroundColor: 'rgba(0, 0, 0, 0.12)' } 
-												}}
+												
 											>
-												<ListItemIcon sx={{ minWidth: 40, color: location.pathname === link.to ? 'primary.main' : 'inherit' }}>
+												<ListItemIcon sx={{ minWidth: 40, color: location.pathname === link.to ? 'primary.main' : 'primary.secondary' }}>
 													{link.icon}
 												</ListItemIcon>
 												<ListItemText 
@@ -94,6 +91,7 @@ const Layout = ({ onThemeToggle, themeMode }) => {
 													primaryTypographyProps={{ 
 														fontWeight: location.pathname === link.to ? 'bold' : 'normal' 
 													}} 
+													sx={{ color: location.pathname === link.to ? 'primary.main' : 'text.primary' }}
 												/>
 											</ListItem>
 										))}

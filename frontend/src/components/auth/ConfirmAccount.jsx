@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Typography, Container, CircularProgress } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
-import { useToast } from "../context/ToastContext.jsx";
-import apiService from "../services/apiService.js";
-import accountService from "../services/accountService.js";
+import { useToast } from "../../context/ToastContext.jsx";
+import  accountService  from "../../services/accountService.js";
+import apiService from "../../services/apiService.js";
 
 const ConfirmAccount = () => {
     const [searchParams] = useSearchParams();

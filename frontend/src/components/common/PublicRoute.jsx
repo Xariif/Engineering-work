@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext.jsx';
+import { useAuth } from '../../context/AuthContext.jsx';
 
 // Public routes are accessible only when the user is NOT logged in
 // If a logged-in user tries to access these routes, they are redirected to the dashboard

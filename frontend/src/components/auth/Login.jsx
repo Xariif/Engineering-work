@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Container, Link } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../context/ToastContext.jsx";
-import { useAuth } from "../context/AuthContext.jsx";
+import { useToast } from "../../context/ToastContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 import { Link as RouterLink } from "react-router-dom";
 
 const Login = () => {

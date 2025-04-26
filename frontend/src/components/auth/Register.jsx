@@ -3,8 +3,8 @@ import { Box, Button, TextField, Typography, Container } from "@mui/material";
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined"; // Import the registration icon
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined"; // Import the back arrow icon
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../context/ToastContext.jsx";
-import accountService from "../services/accountService.js";
+import { useToast } from "../../context/ToastContext.jsx";
+import  accountService  from "../../services/accountService.js"; // Adjust the import path as necessary
 
 const Register = () => {
     const [email, setEmail] = useState("");

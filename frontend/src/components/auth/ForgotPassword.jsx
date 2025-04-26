@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
-import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined"; // Import the arrow icon
-import userService from "../services/userService.js";
-import { useToast } from "../context/ToastContext.jsx";
+import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
+import userService from "../../services/userService.js";
+import { useToast } from "../../context/ToastContext.jsx";
 
 const ForgotPassword = () => {
 	const [email, setEmail] = useState("");

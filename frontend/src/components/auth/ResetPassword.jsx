@@ -3,8 +3,7 @@ import { Box, Button, TextField, Typography, Container, CircularProgress } from 
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined";
-import userService from "../services/userService.js";
-import { useToast } from "../context/ToastContext.jsx";
+import { useToast } from "../../context/ToastContext.jsx";
 
 const ResetPassword = () => {
     const [password, setPassword] = useState("");
