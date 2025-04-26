@@ -87,7 +87,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "RequireTenantRole")]
+        [Authorize(Policy = "RequireTenantOrManagerRole")]
         public async Task<ActionResult<TurnoverResponse>> AddTurnover(
             [FromBody] TurnoverRequest request
         )
@@ -141,7 +141,7 @@ namespace backend.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Policy = "RequireTenantRole")]
+        [Authorize(Policy = "RequireTenantOrManagerRole")]
         public async Task<ActionResult<TurnoverResponse>> UpdateTurnover(
             int id,
             [FromBody] TurnoverRequest request
@@ -207,7 +207,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = "RequireTenantRole")]
+        [Authorize(Policy = "RequireTenantOrManagerRole")]
         public async Task<ActionResult> DeleteTurnover(int id)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -271,8 +271,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("store/{storeId}")]
-        [Authorize(Policy = "RequireTenantRole")]
-        [Authorize(Policy = "RequireManagerRole")]
+        [Authorize(Policy = "RequireTenantOrManagerRole")]
         public async Task<ActionResult<List<TurnoverResponse>>> GetTurnoversByStore(int storeId)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

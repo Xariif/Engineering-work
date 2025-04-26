@@ -6,12 +6,14 @@ import { useToast } from "../../../context/ToastContext.jsx";
 import accessService from "../../../services/accessService.js";
 import turnoverService from "../../../services/turnoverService.js";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import AddIcon from "@mui/icons-material/Add";
 import { format } from "date-fns";
 import TenantHeader from "./components/TenantHeader.jsx";
 import TurnoverSummary from "./components/TurnoverSummary.jsx";
 import UserAccessList from "./components/UserAccessList.jsx";
 import TurnoverHistory from "./components/TurnoverHistory.jsx";
 import TurnoverDialogs from "./components/TurnoverDialogs.jsx";
+import AddTurnoverDialog from "./components/AddTurnoverDialog.jsx";
 
 
 
@@ -27,9 +29,14 @@ const TenantDetail = () => {
 	const [totalTurnover, setTotalTurnover] = useState(0);
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+	const [addDialogOpen, setAddDialogOpen] = useState(false);
 	const [selectedTurnover, setSelectedTurnover] = useState(null);
 	const [editTurnoverValue, setEditTurnoverValue] = useState("");
 	const [isDeleting, setIsDeleting] = useState(false);
+	const [newTurnoverData, setNewTurnoverData] = useState({
+		date: format(new Date(), "yyyy-MM-dd"),
+		value: ""
+	});
 
 	// Check user role
 	const userDetails = JSON.parse(localStorage.getItem("userDetails") || "{}");
@@ -253,16 +260,27 @@ const TenantDetail = () => {
 		}
 
 		try {
-			await turnoverService.updateTurnover(selectedTurnover.id, {
+			const updatedTurnover = await turnoverService.updateTurnover(selectedTurnover.id, {
 				tenantId: parseInt(tenantId),
 				value: parseFloat(editTurnoverValue),
 				date: selectedTurnover.date
 			});
 
-			showToast("Turnover updated successfully", "success");
+			// Update local state instead of refreshing the entire page
+			setTurnoverData(prevData => 
+				prevData.map(item => 
+					item.id === selectedTurnover.id 
+						? {...item, value: parseFloat(editTurnoverValue)} 
+						: item
+				)
+			);
 			
-			// Refresh data
-			fetchTenantData();
+			// Update total turnover
+			setTotalTurnover(prevTotal => 
+				prevTotal - selectedTurnover.value + parseFloat(editTurnoverValue)
+			);
+			
+			showToast("Turnover updated successfully", "success");
 			
 			// Close dialog
 			handleEditDialogClose();
@@ -300,6 +318,48 @@ const TenantDetail = () => {
 			setIsDeleting(false);
 		}
 	}, [selectedTurnover, handleDeleteDialogClose, showToast]);
+
+	// Handle adding new turnover
+	const handleAddDialogOpen = useCallback(() => {
+		setAddDialogOpen(true);
+	}, []);
+
+	const handleAddDialogClose = useCallback(() => {
+		setAddDialogOpen(false);
+		setNewTurnoverData({
+			date: format(new Date(), "yyyy-MM-dd"),
+			value: ""
+		});
+	}, []);
+
+	const handleAddTurnover = useCallback(async () => {
+		if (!newTurnoverData.value) {
+			showToast("Please enter a turnover value", "error");
+			return;
+		}
+
+		try {
+			const newTurnover = await turnoverService.addTurnover({
+				tenantId: parseInt(tenantId),
+				value: parseFloat(newTurnoverData.value),
+				date: newTurnoverData.date
+			});
+
+			// Update local state
+			setTurnoverData(prevData => [...prevData, newTurnover]);
+			
+			// Update total turnover
+			setTotalTurnover(prevTotal => prevTotal + parseFloat(newTurnoverData.value));
+			
+			showToast("Turnover added successfully", "success");
+			
+			// Close dialog
+			handleAddDialogClose();
+		} catch (error) {
+			console.error("Error adding turnover:", error);
+			showToast(error.response?.data?.message || "Failed to add turnover", "error");
+		}
+	}, [newTurnoverData, tenantId, showToast, handleAddDialogClose]);
 
 	if (loading) {
 		return (
@@ -341,6 +401,18 @@ const TenantDetail = () => {
 						<UserAccessList accesses={tenant.accesses} />
 					</Paper>
 
+					<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+						<Typography variant="h6">Turnover Management</Typography>
+						<Button 
+							variant="contained" 
+							color="primary" 
+							startIcon={<AddIcon />}
+							onClick={handleAddDialogOpen}
+						>
+							Add Turnover
+						</Button>
+					</Box>
+
 					<TurnoverHistory 
 						turnoverData={turnoverData}
 						organizeByYearAndMonth={organizeByYearAndMonth}
@@ -350,6 +422,7 @@ const TenantDetail = () => {
 						isSmallScreen={isSmallScreen}
 						onEditClick={handleEditClick}
 						onDeleteClick={handleDeleteClick}
+						storeName={tenant.name}
 					/>
 				</>
 			)}
@@ -365,6 +438,15 @@ const TenantDetail = () => {
 				handleTurnoverUpdate={handleTurnoverUpdate}
 				handleTurnoverDelete={handleTurnoverDelete}
 				isDeleting={isDeleting}
+			/>
+
+			<AddTurnoverDialog
+				open={addDialogOpen}
+				handleClose={handleAddDialogClose}
+				newTurnoverData={newTurnoverData}
+				setNewTurnoverData={setNewTurnoverData}
+				handleAddTurnover={handleAddTurnover}
+				turnoverData={turnoverData}
 			/>
 		</Box>
 	);

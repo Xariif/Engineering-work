@@ -49,7 +49,6 @@ const TurnoverMonthAccordion = memo(({
       expanded={expanded} 
       onChange={handleChange} 
       sx={{ boxShadow: "none" }}
-      TransitionProps={{ unmountOnExit: true }} // Unmount content when collapsed to save memory
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}

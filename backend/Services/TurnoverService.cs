@@ -105,7 +105,7 @@ namespace backend.Services
 
             // Check if turnover already exists for this date and tenant
             var existingTurnover = await _context.Turnovers
-                .FirstOrDefaultAsync(t => t.TenantId == request.TenantId && t.Date.Date == request.Date.Date);
+                .FirstOrDefaultAsync(t => t.TenantId == request.TenantId && t.Date.Date == request.Date.Date.ToUniversalTime());
 
             if (existingTurnover != null)
             {
@@ -115,7 +115,7 @@ namespace backend.Services
             var turnover = new backend.Database.Turnover
             {
                 Value = request.Value,
-                Date = request.Date,
+                Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc), // Convert to UTC
                 TenantId = request.TenantId,
                 Tenant = tenant,
                 User = user,
@@ -246,4 +246,4 @@ namespace backend.Services
             return await query.SumAsync(t => t.Value);
         }
     }
-} 
+}

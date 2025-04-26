@@ -12,7 +12,8 @@ const TurnoverHistory = memo(({
   formatCurrency,
   isSmallScreen,
   onEditClick,
-  onDeleteClick
+  onDeleteClick,
+  storeName
 }) => {
   if (!turnoverData || turnoverData.length === 0) {
     return (
@@ -64,6 +65,7 @@ const TurnoverHistory = memo(({
           isSmallScreen={isSmallScreen}
           onEditClick={onEditClick}
           onDeleteClick={onDeleteClick}
+          storeName={storeName || `Store-${year}`}
         />
       ))}
 

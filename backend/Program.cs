@@ -113,6 +113,12 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("RequireManagerRole", policy => policy.RequireRole("Manager"));
     options.AddPolicy("RequireTenantRole", policy => policy.RequireRole("Tenant"));
+
+    options.AddPolicy("RequireTenantOrManagerRole", policy =>
+    {
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Tenant") || context.User.IsInRole("Manager"));
+    });
 });
 
 builder

@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TurnoverMonthAccordion from "./TurnoverMonthAccordion.jsx";
+import TurnoverYearExport from "./TurnoverYearExport.jsx";
 
 const TurnoverYearAccordion = memo(({ 
   year, 
@@ -16,21 +17,28 @@ const TurnoverYearAccordion = memo(({
   formatCurrency, 
   isSmallScreen, 
   onEditClick, 
-  onDeleteClick 
+  onDeleteClick,
+  storeName
 }) => {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   const handleChange = useCallback(() => {
     setExpanded(prevExpanded => !prevExpanded);
   }, []);
 
-  // Month order reference - defined outside render to avoid recreation
+  const allYearTurnovers = useMemo(() => {
+    return Object.values(months).flat();
+  }, [months]);
+
+  const handleExportClick = useCallback((e) => {
+    e.stopPropagation();
+  }, []);
+
   const monthOrder = useMemo(() => 
     ["December", "November", "October", "September", "August", "July", "June", "May", "April", "March", "February", "January"],
     []
   );
   
-  // Memoize the sorted months to prevent recalculation on each render
   const sortedMonths = useMemo(() => {
     return Object.entries(months)
       .sort(([monthA], [monthB]) => {
@@ -38,15 +46,23 @@ const TurnoverYearAccordion = memo(({
       });
   }, [months, monthOrder]);
   
-  // Memoize the header to avoid recreation on expanded state changes
   const accordionHeader = useMemo(() => (
     <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
       <Typography variant="h6">{year}</Typography>
-      <Typography variant="h6" color="primary.main" sx={{ fontWeight: "bold" }}>
-        {formatCurrency(yearlyTotal)}
-      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Typography variant="h6" color="primary.main" sx={{ fontWeight: "bold", mr: 1 }}>
+          {formatCurrency(yearlyTotal)}
+        </Typography>
+        <Box onClick={handleExportClick}>
+          <TurnoverYearExport 
+            year={year} 
+            turnovers={allYearTurnovers}
+            storeName={storeName}
+          />
+        </Box>
+      </Box>
     </Box>
-  ), [year, yearlyTotal, formatCurrency]);
+  ), [year, yearlyTotal, formatCurrency, allYearTurnovers, storeName, handleExportClick]);
   
   return (
     <Accordion 

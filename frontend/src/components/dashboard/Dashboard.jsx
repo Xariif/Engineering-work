@@ -39,7 +39,7 @@ const Dashboard = () => {
                     }}
                 >
                     <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
-                        Engineering Work Management System
+                         Mall Management System
                     </Typography>
                     <Typography variant="h6" sx={{ maxWidth: 800, mb: 2, opacity: 0.9 }}>
                         A comprehensive solution for mall management, tenant turnover tracking, and data analytics
@@ -52,7 +52,7 @@ const Dashboard = () => {
                 </Box>
 
                 <Box sx={{ p: { xs: 3, md: 4 } }}>
-                    <Grid container spacing={1} sx={{ width: '100%' }} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Grid container spacing={1} sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Grid item xs={12} md={6} lg={4}>
                             <Box textAlign="center" p={2}>
                                 <TrendingUpIcon sx={{ fontSize: 48, color: "primary.main", mb: 1 }} />
@@ -185,7 +185,7 @@ const Dashboard = () => {
                             </Box>
                         </CardContent>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={6} sx={{ width: '100%' }}>
                         <Box 
                             sx={{ 
                                 p: 2, 
