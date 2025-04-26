@@ -147,7 +147,7 @@ builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<AccessService>();
 builder.Services.AddScoped<TurnoverService>();
 builder.Services.AddScoped<CustomEmailSender>();
-
+builder.Services.AddScoped<ReportService>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

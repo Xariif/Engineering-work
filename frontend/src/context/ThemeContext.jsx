@@ -13,7 +13,6 @@ export const ThemeProvider = ({ children }) => {
     }, [mode]);
 
     const toggleColorMode = () => {
-        console.log('Toggling color mode:', mode);  
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
     };
 

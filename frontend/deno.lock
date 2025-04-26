@@ -8,6 +8,7 @@
     "npm:@mui/icons-material@^7.0.1": "7.0.2_@mui+material@7.0.2__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0__react-dom@19.1.0___react@19.1.0_@types+react@19.1.2_react@19.1.0_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_react-dom@19.1.0__react@19.1.0",
     "npm:@mui/material@^7.0.1": "7.0.2_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@types+react@19.1.2_react@19.1.0_react-dom@19.1.0__react@19.1.0",
     "npm:@mui/styled-engine-sc@^7.0.1": "7.0.2_styled-components@6.1.17__react@19.1.0__react-dom@19.1.0___react@19.1.0_react@19.1.0_react-dom@19.1.0__react@19.1.0",
+    "npm:@mui/x-charts@^6.19.5": "6.19.8_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@mui+material@7.0.2__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0__react-dom@19.1.0___react@19.1.0_@mui+system@5.17.1__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0_react@19.1.0_react-dom@19.1.0__react@19.1.0_@types+react@19.1.2",
     "npm:@mui/x-data-grid-pro@^7.28.3": "7.29.0_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@mui+material@7.0.2__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0__react-dom@19.1.0___react@19.1.0_@mui+system@7.0.2__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0_react@19.1.0_react-dom@19.1.0__react@19.1.0_@types+react@19.1.2",
     "npm:@mui/x-data-grid@^7.28.3": "7.29.0_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@mui+material@7.0.2__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0__react-dom@19.1.0___react@19.1.0_@mui+system@7.0.2__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0_react@19.1.0_react-dom@19.1.0__react@19.1.0_@types+react@19.1.2",
     "npm:@mui/x-date-pickers@^7.28.2": "7.29.0_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@mui+material@7.0.2__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0__react-dom@19.1.0___react@19.1.0_@mui+system@7.0.2__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0_date-fns@2.30.0_dayjs@1.11.13_react@19.1.0_react-dom@19.1.0__react@19.1.0_@types+react@19.1.2",
@@ -367,6 +368,30 @@
     "@esbuild/win32-x64@0.25.2": {
       "integrity": "sha512-kM3HKb16VIXZyIeVrM1ygYmZBKybX8N4p754bw390wGO3Tf2j4L2/WYL+4suWujpgf6GBYs3jv7TyUivdd05JA=="
     },
+    "@floating-ui/core@1.6.9": {
+      "integrity": "sha512-uMXCuQ3BItDUbAMhIXw7UPXRfAlOAvZzdK9BWpE60MCn+Svt3aLn9jsPTi/WNGlRUu2uI0v5S7JiIUsbsvh3fw==",
+      "dependencies": [
+        "@floating-ui/utils"
+      ]
+    },
+    "@floating-ui/dom@1.6.13": {
+      "integrity": "sha512-umqzocjDgNRGTuO7Q8CU32dkHkECqI8ZdMZ5Swb6QAM0t5rnlrN3lGo1hdpscRd3WS8T6DKYK4ephgIH9iRh3w==",
+      "dependencies": [
+        "@floating-ui/core",
+        "@floating-ui/utils"
+      ]
+    },
+    "@floating-ui/react-dom@2.1.2_react@19.1.0_react-dom@19.1.0__react@19.1.0": {
+      "integrity": "sha512-06okr5cgPzMNBy+Ycse2A6udMi4bqwW/zgBF/rwjcNqWkyr82Mcg8b0vjX8OJpZFy/FKjJmw6wV7t44kK6kW7A==",
+      "dependencies": [
+        "@floating-ui/dom",
+        "react",
+        "react-dom"
+      ]
+    },
+    "@floating-ui/utils@0.2.9": {
+      "integrity": "sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg=="
+    },
     "@fontsource/roboto@5.2.5": {
       "integrity": "sha512-70r2UZ0raqLn5W+sPeKhqlf8wGvUXFWlofaDlcbt/S3d06+17gXKr3VNqDODB0I1ASme3dGT5OJj9NABt7OTZQ=="
     },
@@ -394,6 +419,21 @@
         "@jridgewell/sourcemap-codec"
       ]
     },
+    "@mui/base@5.0.0-beta.70_@types+react@19.1.2_react@19.1.0_react-dom@19.1.0__react@19.1.0": {
+      "integrity": "sha512-Tb/BIhJzb0pa5zv/wu7OdokY9ZKEDqcu1BDFnohyvGCoHuSXbEr90rPq1qeNW3XvTBIbNWHEF7gqge+xpUo6tQ==",
+      "dependencies": [
+        "@babel/runtime",
+        "@floating-ui/react-dom",
+        "@mui/types@7.2.24_@types+react@19.1.2",
+        "@mui/utils@6.4.9_@types+react@19.1.2_react@19.1.0",
+        "@popperjs/core",
+        "@types/react",
+        "clsx",
+        "prop-types",
+        "react",
+        "react-dom"
+      ]
+    },
     "@mui/core-downloads-tracker@7.0.2": {
       "integrity": "sha512-TfeFU9TgN1N06hyb/pV/63FfO34nijZRMqgHk0TJ3gkl4Fbd+wZ73+ZtOd7jag6hMmzO9HSrBc6Vdn591nhkAg=="
     },
@@ -413,9 +453,9 @@
         "@emotion/react",
         "@emotion/styled",
         "@mui/core-downloads-tracker",
-        "@mui/system",
-        "@mui/types",
-        "@mui/utils",
+        "@mui/system@7.0.2_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@types+react@19.1.2_react@19.1.0",
+        "@mui/types@7.4.1_@types+react@19.1.2",
+        "@mui/utils@7.0.2_@types+react@19.1.2_react@19.1.0",
         "@popperjs/core",
         "@types/react",
         "@types/react-transition-group",
@@ -428,11 +468,21 @@
         "react-transition-group"
       ]
     },
+    "@mui/private-theming@5.17.1_@types+react@19.1.2_react@19.1.0": {
+      "integrity": "sha512-XMxU0NTYcKqdsG8LRmSoxERPXwMbp16sIXPcLVgLGII/bVNagX0xaheWAwFv8+zDK7tI3ajllkuD3GZZE++ICQ==",
+      "dependencies": [
+        "@babel/runtime",
+        "@mui/utils@5.17.1_@types+react@19.1.2_react@19.1.0",
+        "@types/react",
+        "prop-types",
+        "react"
+      ]
+    },
     "@mui/private-theming@7.0.2_@types+react@19.1.2_react@19.1.0": {
       "integrity": "sha512-6lt8heDC9wN8YaRqEdhqnm0cFCv08AMf4IlttFvOVn7ZdKd81PNpD/rEtPGLLwQAFyyKSxBG4/2XCgpbcdNKiA==",
       "dependencies": [
         "@babel/runtime",
-        "@mui/utils",
+        "@mui/utils@7.0.2_@types+react@19.1.2_react@19.1.0",
         "@types/react",
         "prop-types",
         "react"
@@ -449,6 +499,18 @@
         "styled-components"
       ]
     },
+    "@mui/styled-engine@5.16.14_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_react@19.1.0": {
+      "integrity": "sha512-UAiMPZABZ7p8mUW4akDV6O7N3+4DatStpXMZwPlt+H/dA0lt67qawN021MNND+4QTpjaiMYxbhKZeQcyWCbuKw==",
+      "dependencies": [
+        "@babel/runtime",
+        "@emotion/cache",
+        "@emotion/react",
+        "@emotion/styled",
+        "csstype",
+        "prop-types",
+        "react"
+      ]
+    },
     "@mui/styled-engine@7.0.2_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_react@19.1.0": {
       "integrity": "sha512-11Bt4YdHGlh7sB8P75S9mRCUxTlgv7HGbr0UKz6m6Z9KLeiw1Bm9y/t3iqLLVMvSHYB6zL8X8X+LmfTE++gyBw==",
       "dependencies": [
@@ -463,21 +525,44 @@
         "react"
       ]
     },
+    "@mui/system@5.17.1_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@types+react@19.1.2_react@19.1.0": {
+      "integrity": "sha512-aJrmGfQpyF0U4D4xYwA6ueVtQcEMebET43CUmKMP7e7iFh3sMIF3sBR0l8Urb4pqx1CBjHAaWgB0ojpND4Q3Jg==",
+      "dependencies": [
+        "@babel/runtime",
+        "@emotion/react",
+        "@emotion/styled",
+        "@mui/private-theming@5.17.1_@types+react@19.1.2_react@19.1.0",
+        "@mui/styled-engine@5.16.14_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_react@19.1.0",
+        "@mui/types@7.2.24_@types+react@19.1.2",
+        "@mui/utils@5.17.1_@types+react@19.1.2_react@19.1.0",
+        "@types/react",
+        "clsx",
+        "csstype",
+        "prop-types",
+        "react"
+      ]
+    },
     "@mui/system@7.0.2_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@types+react@19.1.2_react@19.1.0": {
       "integrity": "sha512-yFUraAWYWuKIISPPEVPSQ1NLeqmTT4qiQ+ktmyS8LO/KwHxB+NNVOacEZaIofh5x1NxY8rzphvU5X2heRZ/RDA==",
       "dependencies": [
         "@babel/runtime",
         "@emotion/react",
         "@emotion/styled",
-        "@mui/private-theming",
-        "@mui/styled-engine",
-        "@mui/types",
-        "@mui/utils",
+        "@mui/private-theming@7.0.2_@types+react@19.1.2_react@19.1.0",
+        "@mui/styled-engine@7.0.2_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_react@19.1.0",
+        "@mui/types@7.4.1_@types+react@19.1.2",
+        "@mui/utils@7.0.2_@types+react@19.1.2_react@19.1.0",
         "@types/react",
         "clsx",
         "csstype",
         "prop-types",
         "react"
+      ]
+    },
+    "@mui/types@7.2.24_@types+react@19.1.2": {
+      "integrity": "sha512-3c8tRt/CbWZ+pEg7QpSwbdxOk36EfmhbKf6AGZsD1EcLDLTSZoxxJ86FVtcjxvjuhdyBiWKSTGZFaXCnidO2kw==",
+      "dependencies": [
+        "@types/react"
       ]
     },
     "@mui/types@7.4.1_@types+react@19.1.2": {
@@ -487,17 +572,63 @@
         "@types/react"
       ]
     },
-    "@mui/utils@7.0.2_@types+react@19.1.2_react@19.1.0": {
-      "integrity": "sha512-72gcuQjPzhj/MLmPHLCgZjy2VjOH4KniR/4qRtXTTXIEwbkgcN+Y5W/rC90rWtMmZbjt9svZev/z+QHUI4j74w==",
+    "@mui/utils@5.17.1_@types+react@19.1.2_react@19.1.0": {
+      "integrity": "sha512-jEZ8FTqInt2WzxDV8bhImWBqeQRD99c/id/fq83H0ER9tFl+sfZlaAoCdznGvbSQQ9ividMxqSV2c7cC1vBcQg==",
       "dependencies": [
         "@babel/runtime",
-        "@mui/types",
+        "@mui/types@7.2.24_@types+react@19.1.2",
         "@types/prop-types",
         "@types/react",
         "clsx",
         "prop-types",
         "react",
         "react-is@19.1.0"
+      ]
+    },
+    "@mui/utils@6.4.9_@types+react@19.1.2_react@19.1.0": {
+      "integrity": "sha512-Y12Q9hbK9g+ZY0T3Rxrx9m2m10gaphDuUMgWxyV5kNJevVxXYCLclYUCC9vXaIk1/NdNDTcW2Yfr2OGvNFNmHg==",
+      "dependencies": [
+        "@babel/runtime",
+        "@mui/types@7.2.24_@types+react@19.1.2",
+        "@types/prop-types",
+        "@types/react",
+        "clsx",
+        "prop-types",
+        "react",
+        "react-is@19.1.0"
+      ]
+    },
+    "@mui/utils@7.0.2_@types+react@19.1.2_react@19.1.0": {
+      "integrity": "sha512-72gcuQjPzhj/MLmPHLCgZjy2VjOH4KniR/4qRtXTTXIEwbkgcN+Y5W/rC90rWtMmZbjt9svZev/z+QHUI4j74w==",
+      "dependencies": [
+        "@babel/runtime",
+        "@mui/types@7.4.1_@types+react@19.1.2",
+        "@types/prop-types",
+        "@types/react",
+        "clsx",
+        "prop-types",
+        "react",
+        "react-is@19.1.0"
+      ]
+    },
+    "@mui/x-charts@6.19.8_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@mui+material@7.0.2__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0__react-dom@19.1.0___react@19.1.0_@mui+system@5.17.1__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0_react@19.1.0_react-dom@19.1.0__react@19.1.0_@types+react@19.1.2": {
+      "integrity": "sha512-cjwsCJrUPDlMytJHBV+g3gDoSRURiphjclZs8sRnkZ+h4QbHn24K5QkK4bxEj7aCkO2HVJmDE0aqYEg4BnWCOA==",
+      "dependencies": [
+        "@babel/runtime",
+        "@emotion/react",
+        "@emotion/styled",
+        "@mui/base",
+        "@mui/material",
+        "@mui/system@5.17.1_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@types+react@19.1.2_react@19.1.0",
+        "@react-spring/rafz",
+        "@react-spring/web",
+        "clsx",
+        "d3-color",
+        "d3-scale",
+        "d3-shape",
+        "prop-types",
+        "react",
+        "react-dom"
       ]
     },
     "@mui/x-data-grid-pro@7.29.0_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@mui+material@7.0.2__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0__react-dom@19.1.0___react@19.1.0_@mui+system@7.0.2__@emotion+react@11.14.0___react@19.1.0__@emotion+styled@11.14.0___@emotion+react@11.14.0____react@19.1.0___react@19.1.0__@types+react@19.1.2__react@19.1.0_react@19.1.0_react-dom@19.1.0__react@19.1.0_@types+react@19.1.2": {
@@ -507,8 +638,8 @@
         "@emotion/react",
         "@emotion/styled",
         "@mui/material",
-        "@mui/system",
-        "@mui/utils",
+        "@mui/system@7.0.2_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@types+react@19.1.2_react@19.1.0",
+        "@mui/utils@7.0.2_@types+react@19.1.2_react@19.1.0",
         "@mui/x-data-grid",
         "@mui/x-internals",
         "@mui/x-license",
@@ -527,8 +658,8 @@
         "@emotion/react",
         "@emotion/styled",
         "@mui/material",
-        "@mui/system",
-        "@mui/utils",
+        "@mui/system@7.0.2_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@types+react@19.1.2_react@19.1.0",
+        "@mui/utils@7.0.2_@types+react@19.1.2_react@19.1.0",
         "@mui/x-internals",
         "clsx",
         "prop-types",
@@ -545,8 +676,8 @@
         "@emotion/react",
         "@emotion/styled",
         "@mui/material",
-        "@mui/system",
-        "@mui/utils",
+        "@mui/system@7.0.2_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@types+react@19.1.2_react@19.1.0",
+        "@mui/utils@7.0.2_@types+react@19.1.2_react@19.1.0",
         "@mui/x-internals",
         "@types/react-transition-group",
         "clsx",
@@ -562,7 +693,7 @@
       "integrity": "sha512-+Gk6VTZIFD70XreWvdXBwKd8GZ2FlSCuecQFzm6znwqXg1ZsndavrhG9tkxpxo2fM1Zf7Tk8+HcOO0hCbhTQFA==",
       "dependencies": [
         "@babel/runtime",
-        "@mui/utils",
+        "@mui/utils@7.0.2_@types+react@19.1.2_react@19.1.0",
         "react"
       ]
     },
@@ -570,7 +701,7 @@
       "integrity": "sha512-3Yonf5qiXhfVOVyJsVUbCKIDRww8bK+phr11vSTyVhaTa5SzQmGYnLQTJ01+LEMqTSAFKISC2879OXVxmb3DCA==",
       "dependencies": [
         "@babel/runtime",
-        "@mui/utils",
+        "@mui/utils@7.0.2_@types+react@19.1.2_react@19.1.0",
         "@mui/x-internals",
         "react"
       ]
@@ -582,8 +713,8 @@
         "@emotion/react",
         "@emotion/styled",
         "@mui/material",
-        "@mui/system",
-        "@mui/utils",
+        "@mui/system@7.0.2_@emotion+react@11.14.0__react@19.1.0_@emotion+styled@11.14.0__@emotion+react@11.14.0___react@19.1.0__react@19.1.0_@types+react@19.1.2_react@19.1.0",
+        "@mui/utils@7.0.2_@types+react@19.1.2_react@19.1.0",
         "@mui/x-internals",
         "@types/react-transition-group",
         "clsx",
@@ -595,6 +726,48 @@
     },
     "@popperjs/core@2.11.8": {
       "integrity": "sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A=="
+    },
+    "@react-spring/animated@9.7.5_react@19.1.0": {
+      "integrity": "sha512-Tqrwz7pIlsSDITzxoLS3n/v/YCUHQdOIKtOJf4yL6kYVSDTSmVK1LI1Q3M/uu2Sx4X3pIWF3xLUhlsA6SPNTNg==",
+      "dependencies": [
+        "@react-spring/shared",
+        "@react-spring/types",
+        "react"
+      ]
+    },
+    "@react-spring/core@9.7.5_react@19.1.0": {
+      "integrity": "sha512-rmEqcxRcu7dWh7MnCcMXLvrf6/SDlSokLaLTxiPlAYi11nN3B5oiCUAblO72o+9z/87j2uzxa2Inm8UbLjXA+w==",
+      "dependencies": [
+        "@react-spring/animated",
+        "@react-spring/shared",
+        "@react-spring/types",
+        "react"
+      ]
+    },
+    "@react-spring/rafz@9.7.5": {
+      "integrity": "sha512-5ZenDQMC48wjUzPAm1EtwQ5Ot3bLIAwwqP2w2owG5KoNdNHpEJV263nGhCeKKmuA3vG2zLLOdu3or6kuDjA6Aw=="
+    },
+    "@react-spring/shared@9.7.5_react@19.1.0": {
+      "integrity": "sha512-wdtoJrhUeeyD/PP/zo+np2s1Z820Ohr/BbuVYv+3dVLW7WctoiN7std8rISoYoHpUXtbkpesSKuPIw/6U1w1Pw==",
+      "dependencies": [
+        "@react-spring/rafz",
+        "@react-spring/types",
+        "react"
+      ]
+    },
+    "@react-spring/types@9.7.5": {
+      "integrity": "sha512-HVj7LrZ4ReHWBimBvu2SKND3cDVUPWKLqRTmWe/fNY6o1owGOX0cAHbdPDTMelgBlVbrTKrre6lFkhqGZErK/g=="
+    },
+    "@react-spring/web@9.7.5_react@19.1.0_react-dom@19.1.0__react@19.1.0": {
+      "integrity": "sha512-lmvqGwpe+CSttsWNZVr+Dg62adtKhauGwLyGE/RRyZ8AAMLgb9x3NDMA5RMElXo+IMyTkPp7nxTB8ZQlmhb6JQ==",
+      "dependencies": [
+        "@react-spring/animated",
+        "@react-spring/core",
+        "@react-spring/shared",
+        "@react-spring/types",
+        "react",
+        "react-dom"
+      ]
     },
     "@rollup/rollup-android-arm-eabi@4.40.0": {
       "integrity": "sha512-+Fbls/diZ0RDerhE8kyC6hjADCXA1K4yVNlH0EYfd2XjyH0UGgzaQ8MlT0pCXAThfxv3QUAczHaL+qSv1E4/Cg=="
@@ -832,6 +1005,55 @@
     "csstype@3.1.3": {
       "integrity": "sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw=="
     },
+    "d3-array@3.2.4": {
+      "integrity": "sha512-tdQAmyA18i4J7wprpYq8ClcxZy3SC31QMeByyCFyRt7BVHdREQZ5lpzoe5mFEYZUWe+oq8HBvk9JjpibyEV4Jg==",
+      "dependencies": [
+        "internmap"
+      ]
+    },
+    "d3-color@3.1.0": {
+      "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA=="
+    },
+    "d3-format@3.1.0": {
+      "integrity": "sha512-YyUI6AEuY/Wpt8KWLgZHsIU86atmikuoOmCfommt0LYHiQSPjvX2AcFc38PX0CBpr2RCyZhjex+NS/LPOv6YqA=="
+    },
+    "d3-interpolate@3.0.1": {
+      "integrity": "sha512-3bYs1rOD33uo8aqJfKP3JWPAibgw8Zm2+L9vBKEHJ2Rg+viTR7o5Mmv5mZcieN+FRYaAOWX5SJATX6k1PWz72g==",
+      "dependencies": [
+        "d3-color"
+      ]
+    },
+    "d3-path@3.1.0": {
+      "integrity": "sha512-p3KP5HCf/bvjBSSKuXid6Zqijx7wIfNW+J/maPs+iwR35at5JCbLUT0LzF1cnjbCHWhqzQTIN2Jpe8pRebIEFQ=="
+    },
+    "d3-scale@4.0.2": {
+      "integrity": "sha512-GZW464g1SH7ag3Y7hXjf8RoUuAFIqklOAq3MRl4OaWabTFJY9PN/E1YklhXLh+OQ3fM9yS2nOkCoS+WLZ6kvxQ==",
+      "dependencies": [
+        "d3-array",
+        "d3-format",
+        "d3-interpolate",
+        "d3-time",
+        "d3-time-format"
+      ]
+    },
+    "d3-shape@3.2.0": {
+      "integrity": "sha512-SaLBuwGm3MOViRq2ABk3eLoxwZELpH6zhl3FbAoJ7Vm1gofKx6El1Ib5z23NUEhF9AsGl7y+dzLe5Cw2AArGTA==",
+      "dependencies": [
+        "d3-path"
+      ]
+    },
+    "d3-time-format@4.1.0": {
+      "integrity": "sha512-dJxPBlzC7NugB2PDLwo9Q8JiTR3M3e4/XANkreKSUxF8vvXKqm1Yfq4Q5dl8budlunRVlUUaDUgFt7eA8D6NLg==",
+      "dependencies": [
+        "d3-time"
+      ]
+    },
+    "d3-time@3.1.0": {
+      "integrity": "sha512-VqKjzBLejbSMT4IgbmVgDjpkYrNWUYJnbCGo874u7MMKIWsILRX+OpX/gTk8MqjpT1A/c6HY2dCA77ZN0lkQ2Q==",
+      "dependencies": [
+        "d3-array"
+      ]
+    },
     "data-uri-to-buffer@4.0.1": {
       "integrity": "sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A=="
     },
@@ -1025,6 +1247,9 @@
         "parent-module",
         "resolve-from"
       ]
+    },
+    "internmap@2.0.3": {
+      "integrity": "sha512-5Hh7Y1wQbvY5ooGgPbDaL5iYLAPzMTUrjMulskHLH6wnv/A+1q5rgEaiuqEjB+oxGXIVZs1FF+R/KPN3ZSQYYg=="
     },
     "is-arrayish@0.2.1": {
       "integrity": "sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg=="
@@ -1456,6 +1681,7 @@
     ],
     "packageJson": {
       "dependencies": [
+        "npm:@mui/x-charts@^6.19.5",
         "npm:dotenv@^16.5.0",
         "npm:mailersend@^2.5.0",
         "npm:vite@^6.3.2"

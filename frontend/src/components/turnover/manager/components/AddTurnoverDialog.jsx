@@ -39,10 +39,6 @@ const AddTurnoverDialog = ({
     return dates;
   }, [turnoverData]);
 
-  // For debugging - log existing dates when component mounts
-  useEffect(() => {
-    console.log("Existing dates:", [...existingDates]);
-  }, [existingDates]);
 
   const handleValueChange = (e) => {
     const value = e.target.value.replace(/[^0-9]/g, '');

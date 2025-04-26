@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Reports\Response\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
 

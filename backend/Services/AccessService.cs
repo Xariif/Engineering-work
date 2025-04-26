@@ -194,4 +194,34 @@ public class AccessService : BaseService
         _context.Accesses.Remove(access);
         await _context.SaveChangesAsync();
     }
+
+    // Get all malls a manager has access to
+    public async Task<List<Backend.Database.Mall>> GetManagerMallsAsync(string userId)
+    {
+        // Check if user is a manager for any malls
+        var mallAccessIds = await _context.Accesses
+            .Where(a => a.UserId == userId && 
+                     a.ResourceType == ResourceType.Mall && 
+                     a.Role == Role.Manager)
+            .Select(a => int.Parse(a.ResourceId))
+            .ToListAsync();
+
+        // Get all malls the manager has access to
+        var malls = await _context.Malls
+            .Where(m => mallAccessIds.Contains(m.Id))
+            .ToListAsync();
+
+        return malls;
+    }
+
+    // Check if a manager has access to a specific mall
+    public async Task<bool> ManagerHasAccessToMallAsync(string userId, int mallId)
+    {
+        // Check if user is a manager for this mall
+        return await _context.Accesses
+            .AnyAsync(a => a.UserId == userId && 
+                         a.ResourceId == mallId.ToString() && 
+                         a.ResourceType == ResourceType.Mall && 
+                         a.Role == Role.Manager);
+    }
 }

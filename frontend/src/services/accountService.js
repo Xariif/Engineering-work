@@ -22,7 +22,6 @@ const accountService = {
     resetPassword: async (email, token, password, confirmPassword) => {
         const endpoint = "account/reset-password";
         const body = { email, token,password: password, confirmPassword };
-        consolest.log(body);
         return await apiService.post(endpoint, body);
     },
 
