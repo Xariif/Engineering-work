@@ -52,7 +52,7 @@ namespace backend.Controllers
                 var user = await _accountService.RegisterAsync(request);
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 await _emailSender.SendConfirmationLinkAsync(user, request.Email, token);
-                
+
                 return Ok(new { Message = "Registration successful. Please check your email to activate your account." });
             }
             catch (Exception ex)
@@ -82,9 +82,9 @@ namespace backend.Controllers
             {
                 var token = await _accountService.GenerateEmailConfirmationTokenAsync(request.Email);
                 var user = await _userManager.FindByEmailAsync(request.Email);
-                
+
                 await _emailSender.SendConfirmationLinkAsync(user, request.Email, token);
-                
+
                 return Ok(new { Message = "Confirmation email sent successfully" });
             }
             catch (Exception ex)
@@ -132,23 +132,6 @@ namespace backend.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
-
-        /*  
-          [Authorize]
-          [HttpPost("change-email")]
-          public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailRequest request)
-          {
-              try
-              {
-                  var response = await _accountService.ChangeEmailAsync(request);
-                  return Ok(response);
-              }
-              catch (Exception ex)
-              {
-                  return BadRequest(new { Message = ex.Message });
-              }
-          }
-         */
 
         [Authorize]
         [HttpGet("profile")]

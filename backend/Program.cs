@@ -88,7 +88,7 @@ builder
             RoleClaimType = builder.Configuration["Jwt:RoleClaimType"],
             NameClaimType = builder.Configuration["Jwt:NameClaimType"],
         };
-        
+
         // Handle preflight requests
         options.Events = new JwtBearerEvents
         {
@@ -141,20 +141,22 @@ if (string.IsNullOrEmpty(connectionString))
 builder
     .Services.AddEntityFrameworkNpgsql()
     .AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+    
 
 // Configure Services
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<AccessService>();
 builder.Services.AddScoped<TurnoverService>();
-builder.Services.AddScoped<CustomEmailSender>();
 builder.Services.AddScoped<ReportService>();
+builder.Services.AddScoped<CustomEmailSender>();
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    // app.ApplyMigrations(); // Comment out to avoid PostgreSQL file permission errors
 }
 
 // Use CORS policy

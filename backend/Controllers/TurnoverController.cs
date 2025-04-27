@@ -87,7 +87,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "RequireTenantRole")]
+        [Authorize(Policy = "RequireTenantOrManagerRole")]
         public async Task<ActionResult<TurnoverResponse>> AddTurnover(
             [FromBody] TurnoverRequest request
         )

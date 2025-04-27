@@ -15,7 +15,6 @@ namespace backend.Database
         public DbSet<Tenant> Tenants { get; set; }
         public DbSet<Turnover> Turnovers { get; set; }
         public DbSet<Access> Accesses { get; set; }
-        public DbSet<Newsletter> Newsletters { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -42,14 +41,6 @@ namespace backend.Database
                 .Entity<Access>()
                 .HasOne(a => a.User)
                 .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // User -> Newsletter (One-to-Many)
-            builder
-                .Entity<Newsletter>()
-                .HasOne(n => n.User)
-                .WithMany()
-                .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

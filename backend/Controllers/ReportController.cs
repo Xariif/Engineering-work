@@ -18,14 +18,15 @@ namespace backend.Controllers
     {
         private readonly TurnoverService _turnoverService;
         private readonly AccessService _accessService;
+        private readonly ReportService _reportService;
 
-        public ReportController(TurnoverService turnoverService, AccessService accessService)
+        public ReportController(TurnoverService turnoverService, AccessService accessService, ReportService reportService)
         {
             _turnoverService = turnoverService;
             _accessService = accessService;
+            _reportService = reportService;
         }
 
-        // Get malls that the manager has access to
         [HttpGet("malls")]
         public async Task<ActionResult<List<MallSelectDTO>>> GetAccessibleMalls()
         {
@@ -59,7 +60,6 @@ namespace backend.Controllers
             }
         }
 
-        // Get tenants for a specific mall
         [HttpGet("tenants/{mallId}")]
         public async Task<ActionResult<List<TenantSelectDTO>>> GetTenants(int mallId)
         {
@@ -94,7 +94,6 @@ namespace backend.Controllers
             }
         }
 
-        // Get bar chart data for a specific mall
         [HttpGet("chart/bar/{mallId}")]
         public async Task<ActionResult<BarChartDataDTO>> GetBarChartData(int mallId, [FromQuery] ChartPeriodRequest request)
         {
@@ -114,7 +113,7 @@ namespace backend.Controllers
                 }
 
                 // Get data for bar chart
-                var chartData = await _turnoverService.GetBarChartDataAsync(mallId, request.StartDate, request.EndDate, request.TenantIds);
+                var chartData = await _reportService.GetBarChartDataAsync(mallId, request.StartDate, request.EndDate, request.TenantIds);
                 return Ok(chartData);
             }
             catch (Exception ex)
@@ -130,7 +129,6 @@ namespace backend.Controllers
             }
         }
 
-        // Get line chart data for a specific mall
         [HttpGet("chart/line/{mallId}")]
         public async Task<ActionResult<LineChartDataDTO>> GetLineChartData(int mallId, [FromQuery] ChartPeriodRequest request)
         {
@@ -150,7 +148,7 @@ namespace backend.Controllers
                 }
 
                 // Get data for line chart
-                var chartData = await _turnoverService.GetLineChartDataAsync(mallId, request.StartDate, request.EndDate, request.TenantIds);
+                var chartData = await _reportService.GetLineChartDataAsync(mallId, request.StartDate, request.EndDate, request.TenantIds);
                 return Ok(chartData);
             }
             catch (Exception ex)
@@ -164,42 +162,6 @@ namespace backend.Controllers
                     }
                 );
             }
-        }
-
-        // Get pie chart data for a specific mall
-        [HttpGet("chart/pie/{mallId}")]
-        public async Task<ActionResult<PieChartDataDTO>> GetPieChartData(int mallId, [FromQuery] ChartPeriodRequest request)
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized(new { Message = "User ID not found in token" });
-            }
-
-            try
-            {
-                // Check if manager has access to this mall
-                var hasAccess = await _accessService.ManagerHasAccessToMallAsync(userId, mallId);
-                if (!hasAccess)
-                {
-                    return Forbid();
-                }
-
-                // Get data for pie chart
-                var chartData = await _turnoverService.GetPieChartDataAsync(mallId, request.StartDate, request.EndDate, request.TenantIds);
-                return Ok(chartData);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(
-                    500,
-                    new
-                    {
-                        Message = "An error occurred while retrieving pie chart data",
-                        Error = ex.Message,
-                    }
-                );
-            }
-        }
+        }     
     }
 }
