@@ -1,7 +1,3 @@
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using backend.Database;
 using backend.Models.Account.Request;
 using backend.Models.Account.Response;
@@ -10,6 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace backend.Services;
 
@@ -277,12 +277,12 @@ public class AccountService : BaseService
         var roles = _userManager.GetRolesAsync(user).Result;
         foreach (var role in roles)
         {
-            claims.Add(new Claim(_configuration["Jwt:RoleClaimType"], role));
+            claims.Add(new Claim(_configuration["Jwt:RoleClaimType"] ?? "RoleClaimType", role));
         }
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? "Key"));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.Now.AddDays(int.Parse(_configuration["Jwt:ExpirationInDays"]));
+        var expires = DateTime.Now.AddDays(int.Parse(_configuration["Jwt:ExpirationInDays"] ?? "7"));
 
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],

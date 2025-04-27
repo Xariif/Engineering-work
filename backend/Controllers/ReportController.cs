@@ -14,6 +14,7 @@ namespace backend.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
+    [Authorize(Policy = "RequireManagerRole")]
     public class ReportController : ControllerBase
     {
         private readonly TurnoverService _turnoverService;
