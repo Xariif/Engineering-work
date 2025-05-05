@@ -1,16 +1,17 @@
 {
-  "name": "frontend",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "deno run -A --node-modules-dir npm:vite --host 0.0.0.0 --port 3000",
-    "start": "npm run dev"
-  },
-  "dependencies": {
-    "@mui/x-charts": "^6.19.5",
-    "dotenv": "^16.5.0",
-    "mailersend": "^2.5.0",
-    "vite": "^6.3.2"
-  }
+	"name": "frontend",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "deno run -A --node-modules-dir npm:vite --host 0.0.0.0 --port 3000",
+		"build": "deno run -A npm:vite build",
+		"start": "npm run dev"
+	},
+	"dependencies": {
+		"@mui/x-charts": "^6.19.5",
+		"dotenv": "^16.5.0",
+		"mailersend": "^2.5.0",
+		"vite": "^6.3.2"
+	}
 }
