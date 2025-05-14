@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using backend.Database;
 using backend.Models.Access.Request;
 using backend.Models.Access.Response;
 using Backend.Database;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace backend.Services;
 
@@ -21,7 +21,7 @@ public class AccessService : BaseService
     {
     }
 
-    
+
     public GetAccessData GetAccessData()
     {
         var malls = _context.Malls
@@ -53,7 +53,7 @@ public class AccessService : BaseService
     public async Task<GetAccessData> GetTenantAccessDataAsync(string userId)
     {
         // Get all store IDs the user has access to,
-        var t   = await _context.Accesses.ToListAsync();
+        var t = await _context.Accesses.ToListAsync();
         var accessibleStoreIds = await _context.Accesses
             .Where(a => a.UserId == userId && a.ResourceType == ResourceType.Store)
             .Select(a => int.Parse(a.ResourceId))
@@ -89,26 +89,26 @@ public class AccessService : BaseService
     {
         // Check if user has specific access to the tenant
         bool hasDirectAccess = await _context.Accesses
-            .AnyAsync(a => a.UserId == userId && 
-                         a.ResourceId == tenantId.ToString() && 
+            .AnyAsync(a => a.UserId == userId &&
+                         a.ResourceId == tenantId.ToString() &&
                          a.ResourceType == ResourceType.Store);
-        
+
         if (hasDirectAccess)
             return true;
-            
+
         // Check if the user is a manager of the mall containing this tenant
         var tenant = await _context.Tenants
             .Include(t => t.Mall)
             .FirstOrDefaultAsync(t => t.Id == tenantId);
-            
+
         if (tenant == null)
             return false;
-            
+
         // Check if user is a manager for this mall
         return await _context.Accesses
-            .AnyAsync(a => a.UserId == userId && 
-                         a.ResourceId == tenant.Mall.Id.ToString() && 
-                         a.ResourceType == ResourceType.Mall && 
+            .AnyAsync(a => a.UserId == userId &&
+                         a.ResourceId == tenant.Mall.Id.ToString() &&
+                         a.ResourceType == ResourceType.Mall &&
                          a.Role == Role.Manager);
     }
 
@@ -138,8 +138,8 @@ public class AccessService : BaseService
         }
 
         var existingAccess = await _context.Accesses
-            .FirstOrDefaultAsync(a => a.UserId == user.Id && 
-                                   a.ResourceId == tenantId.ToString() && 
+            .FirstOrDefaultAsync(a => a.UserId == user.Id &&
+                                   a.ResourceId == tenantId.ToString() &&
                                    a.ResourceType == ResourceType.Store);
 
         if (existingAccess != null)
@@ -200,8 +200,8 @@ public class AccessService : BaseService
     {
         // Check if user is a manager for any malls
         var mallAccessIds = await _context.Accesses
-            .Where(a => a.UserId == userId && 
-                     a.ResourceType == ResourceType.Mall && 
+            .Where(a => a.UserId == userId &&
+                     a.ResourceType == ResourceType.Mall &&
                      a.Role == Role.Manager)
             .Select(a => int.Parse(a.ResourceId))
             .ToListAsync();
@@ -219,9 +219,9 @@ public class AccessService : BaseService
     {
         // Check if user is a manager for this mall
         return await _context.Accesses
-            .AnyAsync(a => a.UserId == userId && 
-                         a.ResourceId == mallId.ToString() && 
-                         a.ResourceType == ResourceType.Mall && 
+            .AnyAsync(a => a.UserId == userId &&
+                         a.ResourceId == mallId.ToString() &&
+                         a.ResourceType == ResourceType.Mall &&
                          a.Role == Role.Manager);
     }
 }
