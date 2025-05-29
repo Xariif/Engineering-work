@@ -5,6 +5,7 @@ import EmailIcon from "@mui/icons-material/Email";
 
 
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined"; // Import the arrow icon
+import { useToast } from "../../context/ToastContext";
 
 const ResendActivation = () => {
   const [email, setEmail] = useState("");
