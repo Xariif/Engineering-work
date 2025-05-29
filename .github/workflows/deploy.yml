@@ -27,9 +27,6 @@ jobs:
     - name: Publish backend
       run: dotnet publish ./backend -c Release -o ./publish/backend
 
-    - name: Publish frontend
-      run: dotnet publish ./frontend -c Release -o ./publish/frontend
-
     - name: Install frontend dependencies
       working-directory: ./frontend
       run: npm ci
