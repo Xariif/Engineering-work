@@ -30,6 +30,14 @@ jobs:
     - name: Publish frontend
       run: dotnet publish ./frontend -c Release -o ./publish/frontend
 
+    - name: Install frontend dependencies
+      working-directory: ./frontend
+      run: npm ci
+
+    - name: Build frontend
+      working-directory: ./frontend
+      run: npm run build
+
     - name: Create target directories on server
       uses: appleboy/ssh-action@v0.1.7
       with:
@@ -56,7 +64,7 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
-        source: "./publish/frontend/*"
+        source: "./frontend/build/*"
         target: "/var/www/yourapp/frontend/"
 
     - name: Restart backend service
