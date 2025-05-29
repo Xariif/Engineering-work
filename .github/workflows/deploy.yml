@@ -53,9 +53,9 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
-          sudo mkdir -p /var/www/yourapp/backend
-          sudo mkdir -p /var/www/yourapp/frontend
-          sudo chown -R $USER:$USER /var/www/yourapp
+          mkdir -p /var/www/yourapp/backend
+          mkdir -p /var/www/yourapp/frontend
+          chown -R $USER:$USER /var/www/yourapp
 
     - name: Copy backend to server
       uses: appleboy/scp-action@v0.1.6
@@ -82,4 +82,4 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
-          sudo systemctl restart yourapp.service
+          systemctl restart yourapp.service
