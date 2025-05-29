@@ -13,23 +13,26 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add CORS policy
+var frontendUrl = builder.Configuration["FrontendUrl"];
+if (string.IsNullOrEmpty(frontendUrl))
+{
+    throw new InvalidOperationException("Frontend URL is not configured in appsettings.json.");
+}
 
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy(
-//         "AllowFrontend",
-//         builder =>
-//         {
-//             builder
-//                 .WithOrigins(
-//                     "http://localhost:3000")
-//                 .AllowAnyMethod()
-//                 .AllowAnyHeader()
-//                 .AllowCredentials();
-//         }
-//     );
-// });
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "AllowFrontend",
+        policyBuilder =>
+        {
+            policyBuilder
+                .WithOrigins(frontendUrl)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        }
+    );
+});
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
