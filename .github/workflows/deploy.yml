@@ -71,4 +71,4 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
-          systemctl restart yourapp.service
+         sudo systemctl restart yourapp.service
