@@ -46,17 +46,6 @@ jobs:
       working-directory: ./frontend
       run: npm run build
 
-    - name: Create target directories on server
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        script: |
-          mkdir -p /var/www/yourapp/backend
-          mkdir -p /var/www/yourapp/frontend
-          chown -R $USER:$USER /var/www/yourapp
-
     - name: Copy backend to server
       uses: appleboy/scp-action@v0.1.6
       with:
