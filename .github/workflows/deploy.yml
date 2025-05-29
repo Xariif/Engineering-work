@@ -1,44 +1,69 @@
-name: Deploy
+name: Deploy .NET Application to Linux Server
+
 on:
   push:
-    branches: main
-  pull_request:
-    branches: main
+    branches:
+      - main
 
 jobs:
-  deploy:
-    name: Deploy
+  build_and_deploy:
     runs-on: ubuntu-latest
 
-    permissions:
-      id-token: write # Needed for auth with Deno Deploy
-      contents: read # Needed to clone the repository
-
     steps:
-      - name: Clone repository
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Install Deno
-        uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.x
+    - name: Set up .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
+    - name: Restore dependencies
+      run: dotnet restore ./backend/backend.csproj
 
-      - name: Install step
-        run: "deno install"
+    - name: Build backend
+      run: dotnet build ./backend/backend.csproj -c Release
 
-      - name: Build step
-        run: "deno run build"
+    - name: Publish backend
+      run: dotnet publish ./backend -c Release -o ./publish/backend
 
-      - name: Upload to Deno Deploy
-        uses: denoland/deployctl@v1
-        with:
-          project: "jakubfiliks-engineering-88"
-          entrypoint: "root/frontend"
-          root: "frontend"
-          
-          
+    - name: Publish frontend
+      run: dotnet publish ./frontend -c Release -o ./publish/frontend
+
+    - name: Create target directories on server
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: |
+          sudo mkdir -p /var/www/yourapp/backend
+          sudo mkdir -p /var/www/yourapp/frontend
+          sudo chown -R $USER:$USER /var/www/yourapp
+
+    - name: Copy backend to server
+      uses: appleboy/scp-action@v0.1.6
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        source: "./publish/backend/*"
+        target: "/var/www/yourapp/backend/"
+
+    - name: Copy frontend to server
+      uses: appleboy/scp-action@v0.1.6
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        source: "./publish/frontend/*"
+        target: "/var/www/yourapp/frontend/"
+
+    - name: Restart backend service
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: |
+          sudo systemctl restart yourapp.service
