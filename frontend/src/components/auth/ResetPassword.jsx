@@ -42,7 +42,7 @@ const ResetPassword = () => {
             showToast("Password reset successful", "success");
             navigate("/login");
         } catch (error) {
-            showToast(error.response?.data?.message || "Failed to reset password", "error");
+            showToast(error?.message || "Failed to reset password", "error");
         } finally {
             setIsSubmitting(false);
         }

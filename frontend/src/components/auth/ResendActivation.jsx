@@ -31,7 +31,7 @@ const ResendActivation = () => {
       showToast("Activation email has been sent to your email address", "success");
       navigate("/login");
     } catch (error) {
-      showToast(error.response?.data?.message || "Failed to send activation email", "error");
+      showToast(error?.message || "Failed to send activation email", "error");
     } finally {
       setIsSubmitting(false);
     }

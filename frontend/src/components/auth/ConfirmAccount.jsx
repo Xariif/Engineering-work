@@ -35,8 +35,8 @@ const ConfirmAccount = () => {
                 setSuccess(true);
                 showToast("Your account has been successfully activated!", "success");
             } catch (error) {
-                setError(error.response?.data?.message || "Failed to confirm email. Please try again.");
-                showToast(error.response?.data?.message || "Failed to confirm email", "error");
+                setError(error?.message || "Failed to confirm email. Please try again.");
+                showToast(error?.message || "Failed to confirm email", "error");
             } finally {
                 setLoading(false);
             }
@@ -57,7 +57,7 @@ const ConfirmAccount = () => {
             await apiService.post("account/resend-confirmation-email", { email });
             showToast("Confirmation email has been resent to your email address", "success");
         } catch (error) {
-            showToast(error.response?.data?.message || "Failed to resend confirmation email", "error");
+            showToast(error?.message || "Failed to resend confirmation email", "error");
         } finally {
             setLoading(false);
         }

@@ -174,5 +174,12 @@ namespace backend.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+
+        [HttpGet("verify-token")]
+        [Authorize]
+        public IActionResult VerifyToken()
+        {
+            return Ok(new { valid = true });
+        }
     }
 }

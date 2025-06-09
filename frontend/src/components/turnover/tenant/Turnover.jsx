@@ -146,21 +146,21 @@ const Turnover = () => {
         showToast("Turnover updated successfully", "success");
       } else {
         // Add new turnover
-        await turnoverService.addTurnover({
+       let res =   await turnoverService.addTurnover({
           tenantId: parseInt(selectedStore),
           value: parseFloat(turnoverValue),
           date: selectedDate,
         });
+        setSelectedTurnoverId(res.id);
         showToast("Turnover added successfully", "success");
       }
 
       // Refresh turnovers
       const response = await turnoverService.getTurnoversByStore(selectedStore);
-      setTurnovers(response);
+      setTurnovers(prev=> response);
     } catch (error) {
-      console.error("Error saving turnover:", error);
       showToast(
-        error.response?.data?.message || "Failed to save turnover",
+        error?.message || "Failed to save turnover",
         "error",
       );
     }
@@ -186,7 +186,7 @@ const Turnover = () => {
     } catch (error) {
       console.error("Error deleting turnover:", error);
       showToast(
-        error.response?.data?.message || "Failed to delete turnover",
+        error?.message || "Failed to delete turnover",
         "error",
       );
     }

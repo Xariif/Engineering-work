@@ -3,7 +3,7 @@ import { Box, Typography, Paper, Container, Grid, FormControl, InputLabel, Selec
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { format, subMonths, startOfMonth, endOfMonth } from "date-fns";
+import { format, startOfMonth, endOfMonth, subMonths } from "date-fns";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import StorefrontIcon from "@mui/icons-material/Storefront";
@@ -28,19 +28,24 @@ const MenuProps = {
 };
 
 const Reports = () => {
-	const theme = useTheme();
-	const { user } = useAuth();
-	const { showToast } = useToast();
-	const [loading, setLoading] = useState(true);
-	const [malls, setMalls] = useState([]);
-	const [tenants, setTenants] = useState([]);
-	const [selectedMall, setSelectedMall] = useState("");
-	const [selectedTenants, setSelectedTenants] = useState([]);
-	const [startDate, setStartDate] = useState(startOfMonth(subMonths(new Date(), 6)));
-	const [endDate, setEndDate] = useState(endOfMonth(new Date()));
-	const [chartTab, setChartTab] = useState(0);
-	const [error, setError] = useState(null);
-	const [loadingTenants, setLoadingTenants] = useState(false);
+    const theme = useTheme();
+    const { user } = useAuth();
+    const { showToast } = useToast();
+    const [loading, setLoading] = useState(true);
+    const [malls, setMalls] = useState([]);
+    const [tenants, setTenants] = useState([]);
+    const [selectedMall, setSelectedMall] = useState("");
+    const [selectedTenants, setSelectedTenants] = useState([]);
+
+    // Set start month to January this year, end month to current month
+    const now = new Date();
+    const januaryThisYear = startOfMonth(new Date(now.getFullYear(), 0, 1));
+    const [startDate, setStartDate] = useState(januaryThisYear);
+    const [endDate, setEndDate] = useState(endOfMonth(now));
+
+    const [chartTab, setChartTab] = useState(0);
+    const [error, setError] = useState(null);
+    const [loadingTenants, setLoadingTenants] = useState(false);
 
 	// Chart data
 	const [barChartData, setBarChartData] = useState(null);
@@ -100,7 +105,7 @@ const Reports = () => {
 			if (tenantData && Array.isArray(tenantData)) {
 				setTenants(tenantData);
 				// Select all tenants by default
-				setSelectedTenants(tenantData.map((tenant) => tenant.id));
+				// setSelectedTenants(tenantData.map((tenant) => tenant.id));
 				setError(null);
 			} else {
 				setError("Invalid tenant data format received from server");
@@ -141,6 +146,7 @@ const Reports = () => {
 
 	const handleMallChange = (event) => {
 		setSelectedMall(event.target.value);
+		setSelectedTenants([]);
 	};
 
 	const handleTenantChange = (event) => {
@@ -375,7 +381,7 @@ const Reports = () => {
 									}
 								}}
 							>
-								<InputLabel id="tenant-select-label">Tenants</InputLabel>
+								<InputLabel id="tenant-select-label">All Tenants</InputLabel>
 								<Select
 									labelId="tenant-select-label"
 									id="tenant-select"

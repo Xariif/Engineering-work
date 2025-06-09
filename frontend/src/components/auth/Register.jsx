@@ -32,7 +32,7 @@ const Register = () => {
                 navigate("/login");
             })
             .catch((error) => {
-                const errorMessage = error.response?.data?.Message || "An error occurred during registration.";
+                const errorMessage = error?.message || "An error occurred during registration.";
                 showToast(errorMessage, "error");
             });
     };

@@ -286,7 +286,7 @@ const TenantDetail = () => {
 			handleEditDialogClose();
 		} catch (error) {
 			console.error("Error updating turnover:", error);
-			showToast(error.response?.data?.message || "Failed to update turnover", "error");
+			showToast(error?.message || "Failed to update turnover", "error");
 		}
 	}, [selectedTurnover, editTurnoverValue, tenantId, showToast, handleEditDialogClose]);
 
@@ -313,7 +313,7 @@ const TenantDetail = () => {
 			handleDeleteDialogClose();
 		} catch (error) {
 			console.error("Error deleting turnover:", error);
-			showToast(error.response?.data?.message || "Failed to delete turnover", "error");
+			showToast(error?.message || "Failed to delete turnover", "error");
 		} finally {
 			setIsDeleting(false);
 		}
@@ -357,7 +357,7 @@ const TenantDetail = () => {
 			handleAddDialogClose();
 		} catch (error) {
 			console.error("Error adding turnover:", error);
-			showToast(error.response?.data?.message || "Failed to add turnover", "error");
+			showToast(error?.message || "Failed to add turnover", "error");
 		}
 	}, [newTurnoverData, tenantId, showToast, handleAddDialogClose]);
 

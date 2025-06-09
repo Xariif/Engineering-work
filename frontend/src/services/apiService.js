@@ -1,6 +1,12 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+let toastHandler = null;
+
 const apiService = {
+    setToastHandler: (handler) => {
+        toastHandler = handler;
+    },
+
     get: async (endpoint, options = {}) => {
         return apiService.request(endpoint, { method: "GET", ...options });
     },
@@ -33,7 +39,6 @@ const apiService = {
             });
 
             if (response.url.includes("Account/Login")) {
-                console.warn("Authentication required. Redirected to login page.");
                 throw new Error("Authentication required. Please log in.");
             }
 
@@ -42,12 +47,17 @@ const apiService = {
                 const data = text ? JSON.parse(text) : {};
                 return data;
             } else {
-                throw new Error(`Error: ${response.status} ${response.statusText}`);               
+                const errorText = await response.text();
+                let errorMessage = `Error: ${response.status} ${response.statusText}`;
+                try {
+                    const errorData = errorText ? JSON.parse(errorText) : {};
+                    errorMessage = errorData.Message || errorData.message || errorMessage;
+                } catch {}
+                if (toastHandler) toastHandler(errorMessage, "error");
+                throw new Error(errorMessage);
             }
         } catch (error) {
-            if (error.response) {
-                throw error; 
-            }
+            if (toastHandler) toastHandler(error.message || "Unexpected error", "error");
             throw error;
         }
     },

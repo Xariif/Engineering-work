@@ -42,6 +42,10 @@ const accountService = {
         const body = { token, email };
         return await apiService.post(endpoint, body);
     },
+
+    verifyToken: async () => {
+        return apiService.get("account/verify-token");
+    }
 };
 
 export default accountService;

@@ -11,11 +11,21 @@ export const AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		const localStorageUser = localStorage.getItem("userDetails");
-		if (localStorageUser) {
-			setUser((prev) => ({ ...prev, ...JSON.parse(localStorageUser) }));
-		}
+		const token = localStorage.getItem("authToken");
 
-		setLoading(false);
+		if (localStorageUser && token) {
+			accountService
+				.verifyToken()
+				.then(() => {
+					setUser((prev) => ({ ...prev, ...JSON.parse(localStorageUser) }));
+				})
+				.catch(() => {
+					logout();
+				})
+				.finally(() => setLoading(false));
+		} else {
+			setLoading(false);
+		}
 	}, []);
 
 	const login = async (email, password) => {
@@ -46,6 +56,7 @@ export const AuthProvider = ({ children }) => {
 	const logout = () => {
 		localStorage.removeItem("authToken");
 		localStorage.removeItem("userDetails");
+		resetTheme();
 		setUser(null);
 	};
 
