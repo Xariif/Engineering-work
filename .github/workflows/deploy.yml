@@ -21,6 +21,14 @@ jobs:
           echo "Wszystkie zmienne środowiskowe na serwerze:"
           printenv
 
+    - name: Create appsettings.Production.json
+      run: |
+        echo '${{ secrets.APPSETTINGS_PROD_JSON }}' > ./backend/appsettings.Production.json
+
+    - name: Create frontend .env
+      run: |
+        echo '${{ secrets.FRONTEND_ENV }}' > ./frontend/.env
+
     - name: Checkout code
       uses: actions/checkout@v3
 
