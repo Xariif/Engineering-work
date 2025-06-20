@@ -13,6 +13,9 @@ dist-ssr
 .vite
 *.local
 
+# Environment and secrets
+.env
+.env.local
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
