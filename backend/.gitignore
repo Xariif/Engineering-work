@@ -288,4 +288,5 @@ __pycache__/
 *.xsd.cs
 
 
-appsettings.*.json
+appsettings.Development.json
+appsettings.Production.json
