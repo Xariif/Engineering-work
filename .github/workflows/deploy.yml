@@ -11,15 +11,13 @@ jobs:
     environment: Linux Server
 
     steps:
-    - name: Show environment variables on server
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        script: |
-          echo "Wszystkie zmienne środowiskowe na serwerze:"
-          printenv
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Ensure backend and frontend directories exist
+      run: |
+        mkdir -p ./backend
+        mkdir -p ./frontend
 
     - name: Create appsettings.Production.json
       run: |
@@ -28,9 +26,6 @@ jobs:
     - name: Create frontend .env
       run: |
         echo '${{ secrets.FRONTEND_ENV }}' > ./frontend/.env
-
-    - name: Checkout code
-      uses: actions/checkout@v3
 
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v3
@@ -79,4 +74,4 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
-         sudo systemctl restart yourapp.service
+          sudo systemctl restart yourapp.service
