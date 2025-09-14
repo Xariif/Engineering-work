@@ -11,5 +11,6 @@ RUN dotnet publish backend.csproj -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
-COPY appsettings.Production.json ./appsettings.Production.json
+RUN echo '${{ secrets.APPSETTINGS_PROD_JSON }}' > ./backend/appsettings.Production.json
 ENTRYPOINT ["dotnet", "backend.dll"]
+
