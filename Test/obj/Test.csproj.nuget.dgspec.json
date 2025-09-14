@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\GITHUB\\Engineering-work\\Test\\Test.csproj": {}
+    "E:\\Programowanie\\Engineering-work\\Test\\Test.csproj": {}
   },
   "projects": {
-    "C:\\GITHUB\\Engineering-work\\backend\\backend.csproj": {
+    "E:\\Programowanie\\Engineering-work\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GITHUB\\Engineering-work\\backend\\backend.csproj",
+        "projectUniqueName": "E:\\Programowanie\\Engineering-work\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\GITHUB\\Engineering-work\\backend\\backend.csproj",
+        "projectPath": "E:\\Programowanie\\Engineering-work\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\jakub\\.nuget\\packages\\",
-        "outputPath": "C:\\GITHUB\\Engineering-work\\backend\\obj\\",
+        "outputPath": "E:\\Programowanie\\Engineering-work\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -44,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -116,18 +116,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\GITHUB\\Engineering-work\\Test\\Test.csproj": {
+    "E:\\Programowanie\\Engineering-work\\Test\\Test.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GITHUB\\Engineering-work\\Test\\Test.csproj",
+        "projectUniqueName": "E:\\Programowanie\\Engineering-work\\Test\\Test.csproj",
         "projectName": "Test",
-        "projectPath": "C:\\GITHUB\\Engineering-work\\Test\\Test.csproj",
+        "projectPath": "E:\\Programowanie\\Engineering-work\\Test\\Test.csproj",
         "packagesPath": "C:\\Users\\jakub\\.nuget\\packages\\",
-        "outputPath": "C:\\GITHUB\\Engineering-work\\Test\\obj\\",
+        "outputPath": "E:\\Programowanie\\Engineering-work\\Test\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -148,8 +148,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\GITHUB\\Engineering-work\\backend\\backend.csproj": {
-                "projectPath": "C:\\GITHUB\\Engineering-work\\backend\\backend.csproj"
+              "E:\\Programowanie\\Engineering-work\\backend\\backend.csproj": {
+                "projectPath": "E:\\Programowanie\\Engineering-work\\backend\\backend.csproj"
               }
             }
           }
@@ -164,7 +164,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -207,7 +207,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
