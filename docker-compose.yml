@@ -2,7 +2,7 @@ services:
   backend:
     image: xariif/engineering-work-backend:latest
     ports:
-      - "5000:5000"
+      - "5001:5000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
     restart: always
@@ -10,5 +10,5 @@ services:
   frontend:
     image: xariif/engineering-work-frontend:latest
     ports:
-      - "3000:80"
+      - "3001:80"
     restart: always
