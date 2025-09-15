@@ -8,3 +8,5 @@ services:
   frontend:
     image: xariif/engineering-work-frontend:latest
     restart: always
+    env_file:
+      - path: .env
