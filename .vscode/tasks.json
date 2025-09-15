@@ -41,7 +41,11 @@
     {
       "label": "prep-backend",
       "dependsOrder": "sequence",
-      "dependsOn": ["kill-port-5000", "dotnet: restore", "dotnet: build"],
+      "dependsOn": [
+        "kill-port-5000",
+        "dotnet: restore",
+        "dotnet: build"
+      ],
       "presentation": {
         "reveal": "always",
         "panel": "shared"
@@ -62,10 +66,91 @@
     {
       "label": "prep-frontend",
       "dependsOrder": "sequence",
-      "dependsOn": ["kill-port-3000", "kill-port-9229"],
+      "dependsOn": [
+        "kill-port-3000",
+        "kill-port-9229"
+      ],
       "presentation": {
         "reveal": "always",
         "panel": "shared"
+      }
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build: debug",
+      "dependsOn": [
+        "build"
+      ],
+      "dockerBuild": {
+        "tag": "engineeringwork:dev",
+        "target": "base",
+        "dockerfile": "${workspaceFolder}/backend/Dockerfile",
+        "context": "${workspaceFolder}",
+        "pull": true
+      },
+      "netCore": {
+        "appProject": "${workspaceFolder}/backend/backend.csproj"
+      }
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build: release",
+      "dependsOn": [
+        "build"
+      ],
+      "dockerBuild": {
+        "tag": "engineeringwork:latest",
+        "dockerfile": "${workspaceFolder}/backend/Dockerfile",
+        "context": "${workspaceFolder}",
+        "platform": {
+          "os": "linux",
+          "architecture": "amd64"
+        },
+        "pull": true
+      },
+      "netCore": {
+        "appProject": "${workspaceFolder}/backend/backend.csproj"
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: debug",
+      "dependsOn": [
+        "docker-build"
+      ],
+      "dockerRun": {
+        "env": {
+          "DEBUG": "*",
+          "NODE_ENV": "development"
+        }
+      },
+      "node": {
+        "package": "${workspaceFolder}/frontend/package.json",
+        "enableDebugging": true
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: release",
+      "dependsOn": [
+        "docker-build"
+      ],
+      "platform": "node",
+      "node": {
+        "package": "${workspaceFolder}/frontend/package.json"
+      }
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build",
+      "platform": "node",
+      "dockerBuild": {
+        "dockerfile": "${workspaceFolder}/frontend/Dockerfile",
+        "context": "${workspaceFolder}/frontend",
+        "pull": true
+      },
+      "node": {
+        "package": "${workspaceFolder}/frontend/package.json"
       }
     }
   ]

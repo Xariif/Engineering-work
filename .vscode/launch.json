@@ -19,11 +19,33 @@
 			"request": "launch",
 			"cwd": "${workspaceFolder}/frontend",
 			"runtimeExecutable": "npm",
-			"runtimeArgs": ["run", "dev"],
-			"preLaunchTask":  "prep-frontend",
-			"console": "integratedTerminal",
-			
+			"runtimeArgs": [
+				"run",
+				"dev"
+			],
+			"preLaunchTask": "prep-frontend",
+			"console": "integratedTerminal"
 		},
+		{
+			"name": "Containers: .NET Launch",
+			"type": "docker",
+			"request": "launch",
+			"preLaunchTask": "docker-run: debug",
+			"netCore": {
+				"appProject": "${workspaceFolder}/backend/backend.csproj"
+			}
+		},
+		{
+			"name": "Containers: Node.js Launch",
+			"type": "docker",
+			"request": "launch",
+			"preLaunchTask": "docker-run: debug",
+			"platform": "node",
+			"node": {
+				"package": "${workspaceFolder}/frontend/package.json",
+				"localRoot": "${workspaceFolder}/frontend"
+			}
+		}
 	],
 	"compounds": [
 		{
