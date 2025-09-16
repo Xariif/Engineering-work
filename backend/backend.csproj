@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <Compile Remove="NewFolder\**" />
+    <Compile Remove="Repositories\**" />
     <Content Remove="NewFolder\**" />
+    <Content Remove="Repositories\**" />
     <EmbeddedResource Remove="NewFolder\**" />
+    <EmbeddedResource Remove="Repositories\**" />
     <None Remove="NewFolder\**" />
+    <None Remove="Repositories\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,7 +37,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Reports\Response\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>

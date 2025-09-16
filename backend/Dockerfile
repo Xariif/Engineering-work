@@ -1,27 +1,24 @@
-# Etap 1: Build
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 5000
+
+ENV ASPNETCORE_URLS=http://+:5000
+
+USER app
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG configuration=Release
 WORKDIR /src
-
-# Kopiujemy csproj
-COPY backend.csproj ./
-RUN dotnet restore "backend.csproj"
-
-# Kopiujemy resztę backendu
-COPY . ./
-
-# Build
+COPY ["backend/backend.csproj", "backend/"]
+RUN dotnet restore "backend/backend.csproj"
+COPY . .
+WORKDIR "/src/backend"
 RUN dotnet build "backend.csproj" -c $configuration -o /app/build
 
-# Etap 2: Publish
 FROM build AS publish
 ARG configuration=Release
 RUN dotnet publish "backend.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
 
-# Etap 3: Final
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM base AS final
 WORKDIR /app
-# EXPOSE 5000
-# ENV ASPNETCORE_URLS=http://+:5000
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "backend.dll"]
