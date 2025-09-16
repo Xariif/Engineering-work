@@ -8,9 +8,9 @@ USER app
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG configuration=Release
 WORKDIR /src
-COPY backend/backend.csproj ./
+COPY ./backend/backend.csproj ./
 RUN dotnet restore "backend.csproj"
-COPY backend/. ./backend
+COPY ./backend/. ./backend
 WORKDIR /src/backend
 RUN dotnet build "backend.csproj" -c $configuration -o /app/build
 
