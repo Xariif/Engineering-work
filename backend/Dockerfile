@@ -21,7 +21,7 @@ RUN dotnet publish "backend.csproj" -c $configuration -o /app/publish /p:UseAppH
 # Etap 3: Final
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
-EXPOSE 5000
-ENV ASPNETCORE_URLS=http://+:5000
+# EXPOSE 5000
+# ENV ASPNETCORE_URLS=http://+:5000
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "backend.dll"]
