@@ -7,12 +7,12 @@ ENV ASPNETCORE_URLS=http://+:5000
 USER app
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG configuration=Release
+WORKDIR /src
+COPY backend/backend.csproj ./
+RUN dotnet restore "backend.csproj"
+COPY backend/. ./backend
 WORKDIR /src/backend
-COPY ./backend.csproj backend/
-RUN dotnet restore "./backend/backend.csproj"
-COPY . .
-#WORKDIR "/src/backend"
-RUN dotnet build "./backend/backend.csproj" -c $configuration -o /app/build
+RUN dotnet build "backend.csproj" -c $configuration -o /app/build
 
 FROM build AS publish
 ARG configuration=Release
