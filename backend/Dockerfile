@@ -9,13 +9,13 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # kopiujemy tylko csproj żeby cache działał
-COPY backend/backend.csproj ./ 
-RUN dotnet restore backend.csproj
+COPY backend/backend.csproj ./backend/
+RUN dotnet restore ./backend/backend.csproj
 
-# kopiujemy resztę kodu
+# kopiujemy resztę backendu
 COPY backend/ ./backend
 WORKDIR /src/backend
-RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish backend.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 # Etap 3: finalny obraz
 FROM base AS final
