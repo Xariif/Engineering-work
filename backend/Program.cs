@@ -13,6 +13,31 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add CORS policy
+
+Console.WriteLine("--- All Loaded Configuration ---");
+
+// Iterate through the top-level sections
+foreach (var section in builder.Configuration.GetChildren())
+{
+    PrintSection(section, "");
+}
+
+void PrintSection(IConfigurationSection section, string prefix)
+{
+    // Print the value if it's a direct key-value pair
+    if (section.Value != null)
+    {
+        Console.WriteLine($"{prefix}{section.Key}: {section.Value}");
+    }
+
+    // Recursively print nested sections
+    foreach (var child in section.GetChildren())
+    {
+        PrintSection(child, prefix + section.Key + ":");
+    }
+}
+
+
 var frontendUrl = builder.Configuration["FrontendUrl"];
 if (string.IsNullOrEmpty(frontendUrl))
 {
