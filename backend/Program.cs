@@ -13,8 +13,8 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add CORS policy
-var frontendUrl = builder.Configuration["FrontendUrl"];
-if (string.IsNullOrEmpty(frontendUrl))
+var frontendUrl = builder.Configuration;
+if (string.IsNullOrEmpty(frontendUrl["FrontendUrl"]))
 {
     throw new InvalidOperationException("Frontend URL is not configured in appsettings.json.");
 }
