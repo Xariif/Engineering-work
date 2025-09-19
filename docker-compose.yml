@@ -13,4 +13,7 @@ services:
       - Jwt__Issuer=${Jwt__Issuer}
       - Jwt__Audience=${Jwt__Audience}
       - Jwt__Key=${Jwt__Key}
+      - Jwt__ExpirationInDays=${Jwt__ExpirationInDays}
+      - Jwt__RoleClaimType=${Jwt__RoleClaimType}
+      - Jwt__NameClaimType=${Jwt__NameClaimType}
       - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
