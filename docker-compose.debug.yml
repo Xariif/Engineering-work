@@ -6,11 +6,11 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-      args:
-        - configuration=Debug
     ports:
-      - 5000:5000
+      - '5000:5000'
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    volumes:
-      - ~/.vsdbg:/remote_debugger:rw
+      - FrontendUrl=${FrontendUrl}
+      - Jwt__Issuer=${Jwt__Issuer}
+      - Jwt__Audience=${Jwt__Audience}
+      - Jwt__Key=${Jwt__Key}
+      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
