@@ -7,4 +7,10 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     ports:
-      - 5000:5000
+      - '5000:5000'
+    environment:
+      - FrontendUrl=${FrontendUrl}
+      - Jwt__Issuer=${Jwt__Issuer}
+      - Jwt__Audience=${Jwt__Audience}
+      - Jwt__Key=${Jwt__Key}
+      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
