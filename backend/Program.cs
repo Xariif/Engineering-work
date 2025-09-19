@@ -14,10 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add CORS policy
 var frontendUrl = builder.Configuration;
-if (string.IsNullOrEmpty(frontendUrl["FrontendUrl"]))
-{
-    throw new InvalidOperationException("Frontend URL is not configured in appsettings.json.");
-}
 
 builder.Services.AddCors(options =>
 {
@@ -26,7 +22,7 @@ builder.Services.AddCors(options =>
         policyBuilder =>
         {
             policyBuilder
-                .WithOrigins(frontendUrl)
+                .WithOrigins(frontendUrl["FrontendUrl"])
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();

@@ -1,26 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/Users/jakub/Documents/Engineering-work/Test/Test.csproj": {}
+    "E:\\Programowanie\\Engineering-work\\Test\\Test.csproj": {}
   },
   "projects": {
-    "/Users/jakub/Documents/Engineering-work/backend/backend.csproj": {
+    "E:\\Programowanie\\Engineering-work\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/jakub/Documents/Engineering-work/backend/backend.csproj",
+        "projectUniqueName": "E:\\Programowanie\\Engineering-work\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "/Users/jakub/Documents/Engineering-work/backend/backend.csproj",
-        "packagesPath": "/Users/jakub/.nuget/packages/",
-        "outputPath": "/Users/jakub/Documents/Engineering-work/backend/obj/",
+        "projectPath": "E:\\Programowanie\\Engineering-work\\backend\\backend.csproj",
+        "packagesPath": "C:\\Users\\jakub\\.nuget\\packages\\",
+        "outputPath": "E:\\Programowanie\\Engineering-work\\backend\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/jakub/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\jakub\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -103,20 +108,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.18, 8.0.18]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.osx-x64",
-              "version": "[8.0.18, 8.0.18]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.18, 8.0.18]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -125,35 +116,40 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.302/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/jakub/Documents/Engineering-work/Test/Test.csproj": {
+    "E:\\Programowanie\\Engineering-work\\Test\\Test.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/jakub/Documents/Engineering-work/Test/Test.csproj",
+        "projectUniqueName": "E:\\Programowanie\\Engineering-work\\Test\\Test.csproj",
         "projectName": "Test",
-        "projectPath": "/Users/jakub/Documents/Engineering-work/Test/Test.csproj",
-        "packagesPath": "/Users/jakub/.nuget/packages/",
-        "outputPath": "/Users/jakub/Documents/Engineering-work/Test/obj/",
+        "projectPath": "E:\\Programowanie\\Engineering-work\\Test\\Test.csproj",
+        "packagesPath": "C:\\Users\\jakub\\.nuget\\packages\\",
+        "outputPath": "E:\\Programowanie\\Engineering-work\\Test\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/jakub/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\jakub\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/jakub/Documents/Engineering-work/backend/backend.csproj": {
-                "projectPath": "/Users/jakub/Documents/Engineering-work/backend/backend.csproj"
+              "E:\\Programowanie\\Engineering-work\\backend\\backend.csproj": {
+                "projectPath": "E:\\Programowanie\\Engineering-work\\backend\\backend.csproj"
               }
             }
           }
@@ -206,22 +202,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.18, 8.0.18]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.18, 8.0.18]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.302/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
