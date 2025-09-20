@@ -134,7 +134,8 @@ const Layout = ({ onThemeToggle, themeMode }) => {
 					</Typography>
 
 					<Typography variant="body2" color="text.secondary">
-						Created by Jakub Filiks
+						Created by Jakub Filiks 
+						<a href="https://freedns.afraid.org/">Free DNS</a>
 					</Typography>
 				</Container>
 			</Box>
