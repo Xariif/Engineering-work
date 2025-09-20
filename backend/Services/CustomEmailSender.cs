@@ -34,8 +34,8 @@ namespace backend.Services
             client.Timeout = 30000;
 
             MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("jakubfiliks7@gmail.com");
-            mailMessage.To.Add(to);
+            mailMessage.From = new MailAddress("mallmanager");
+            mailMessage.To.Add("jakubfiliks7@gmail.com");
             mailMessage.Subject = subject;
             mailMessage.IsBodyHtml = true;
             mailMessage.Body = message;
