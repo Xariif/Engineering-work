@@ -17,3 +17,7 @@ services:
       - Jwt__RoleClaimType=${Jwt__RoleClaimType}
       - Jwt__NameClaimType=${Jwt__NameClaimType}
       - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
+      - EmailSettings__Server=${EmailSettings__Server}
+      - EmailSettings__Port=${EmailSettings__Port}
+      - EmailSettings__Username=${EmailSettings__Username}
+      - EmailSettings__Password=${EmailSettings__Password}
