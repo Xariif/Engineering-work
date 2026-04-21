@@ -36,6 +36,8 @@ if [ "${confirm}" != "YES" ]; then
 fi
 
 export PGPASSWORD="${DB_PASSWORD}"
+# Note: PGPASSWORD is used here for scripting convenience.
+# For enhanced security in production, consider using a ~/.pgpass file instead.
 
 # ── Drop ──────────────────────────────────────────────────────────────────────
 echo "[1/3] Dropping database '${DB_NAME}'..."

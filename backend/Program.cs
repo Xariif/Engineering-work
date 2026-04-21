@@ -181,7 +181,9 @@ builder.Services.AddScoped<CustomEmailSender>();
 
 var app = builder.Build();
 
-// Apply pending EF Core migrations automatically on startup
+// Apply pending EF Core migrations automatically on startup.
+// Note: suitable for single-instance deployments. In multi-instance setups,
+// run migrations separately before starting additional instances to avoid race conditions.
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
