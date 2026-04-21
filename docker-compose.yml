@@ -1,14 +1,31 @@
-# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
-
 services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
   backend:
-    image: backend
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/engineering-work-backend:latest
     build:
       context: .
       dockerfile: backend/Dockerfile
+    restart: unless-stopped
     ports:
       - '5000:5000'
     environment:
+      - ASPNETCORE_ENVIRONMENT=Production
       - FrontendUrl=${FrontendUrl}
       - Jwt__Issuer=${Jwt__Issuer}
       - Jwt__Audience=${Jwt__Audience}
@@ -16,8 +33,36 @@ services:
       - Jwt__ExpirationInDays=${Jwt__ExpirationInDays}
       - Jwt__RoleClaimType=${Jwt__RoleClaimType}
       - Jwt__NameClaimType=${Jwt__NameClaimType}
-      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
       - EmailSettings__Server=${EmailSettings__Server}
       - EmailSettings__Port=${EmailSettings__Port}
       - EmailSettings__Username=${EmailSettings__Username}
       - EmailSettings__Password=${EmailSettings__Password}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  frontend:
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/engineering-work-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+        VITE_API_MAILSENDER: ${VITE_API_MAILSENDER}
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+volumes:
+  pgdata:
+
+networks:
+  app-network:
+    driver: bridge

@@ -181,6 +181,13 @@ builder.Services.AddScoped<CustomEmailSender>();
 
 var app = builder.Build();
 
+// Apply pending EF Core migrations automatically on startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
