@@ -2,22 +2,34 @@
 
 services:
   backend:
-    image: backend
+    image: ${BACKEND_IMAGE:-engineeringwork-backend:latest}
     build:
       context: .
       dockerfile: backend/Dockerfile
     ports:
       - '5000:5000'
     environment:
-      - FrontendUrl=${FrontendUrl}
-      - Jwt__Issuer=${Jwt__Issuer}
-      - Jwt__Audience=${Jwt__Audience}
-      - Jwt__Key=${Jwt__Key}
-      - Jwt__ExpirationInDays=${Jwt__ExpirationInDays}
-      - Jwt__RoleClaimType=${Jwt__RoleClaimType}
-      - Jwt__NameClaimType=${Jwt__NameClaimType}
-      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
-      - EmailSettings__Server=${EmailSettings__Server}
-      - EmailSettings__Port=${EmailSettings__Port}
-      - EmailSettings__Username=${EmailSettings__Username}
-      - EmailSettings__Password=${EmailSettings__Password}
+      - FrontendUrl=${FrontendUrl:-}
+      - Jwt__Issuer=${Jwt__Issuer:-}
+      - Jwt__Audience=${Jwt__Audience:-}
+      - Jwt__Key=${Jwt__Key:-}
+      - Jwt__ExpirationInDays=${Jwt__ExpirationInDays:-}
+      - Jwt__RoleClaimType=${Jwt__RoleClaimType:-}
+      - Jwt__NameClaimType=${Jwt__NameClaimType:-}
+      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection:-}
+      - EmailSettings__Server=${EmailSettings__Server:-}
+      - EmailSettings__Port=${EmailSettings__Port:-}
+      - EmailSettings__Username=${EmailSettings__Username:-}
+      - EmailSettings__Password=${EmailSettings__Password:-}
+
+  frontend:
+    image: ${FRONTEND_IMAGE:-engineeringwork-frontend:latest}
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:5000}
+    depends_on:
+      - backend
+    ports:
+      - '3000:80'

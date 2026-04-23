@@ -2,15 +2,27 @@
 
 services:
   backend:
-    image: backend
+    image: ${BACKEND_IMAGE_DEBUG:-engineeringwork-backend:debug}
     build:
       context: .
       dockerfile: backend/Dockerfile
     ports:
       - '5000:5000'
     environment:
-      - FrontendUrl=${FrontendUrl}
-      - Jwt__Issuer=${Jwt__Issuer}
-      - Jwt__Audience=${Jwt__Audience}
-      - Jwt__Key=${Jwt__Key}
-      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection}
+      - FrontendUrl=${FrontendUrl:-}
+      - Jwt__Issuer=${Jwt__Issuer:-}
+      - Jwt__Audience=${Jwt__Audience:-}
+      - Jwt__Key=${Jwt__Key:-}
+      - ConnectionStrings__DefaultConnection=${ConnectionStrings__DefaultConnection:-}
+
+  frontend:
+    image: ${FRONTEND_IMAGE_DEBUG:-engineeringwork-frontend:debug}
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:5000}
+    depends_on:
+      - backend
+    ports:
+      - '3000:80'
