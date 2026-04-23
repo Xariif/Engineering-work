@@ -1,0 +1,76 @@
+# ------------------------------
+# Global ignore rules (monorepo)
+# ------------------------------
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.tmp
+
+.vs/
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Local app settings (keep templates committed)
+backend/appsettings.json
+backend/appsettings.Development.json
+
+# ------------------------------
+# .NET / C#
+# ------------------------------
+**/[Bb]in/
+**/[Oo]bj/
+[Tt]est[Rr]esult*/
+TestResults/
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Coverage / test artifacts
+*.coverage
+*.coveragexml
+coverage/
+
+# ------------------------------
+# Node / frontend (Vite)
+# ------------------------------
+**/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/.vite/
+
+# Optional package manager caches
+.pnpm-store/
+.npm/
+
+# ------------------------------
+# Docker / containers
+# ------------------------------
+*.pid
+*.seed
+*.pid.lock
+
+# Ignore temporary compose override files (if used locally)
+docker-compose.override.yml
