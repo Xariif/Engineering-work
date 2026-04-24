@@ -71,8 +71,8 @@ public class AccountService : BaseService
             Token = token,
             FirstName = user.Name,
             LastName = user.Surname,
-            PhoneNumber = user.PhoneNumber,
-            Email = user.Email,
+            PhoneNumber = user.PhoneNumber ?? string.Empty,
+            Email = user.Email ?? string.Empty,
             Role = roles.FirstOrDefault() ?? "Tenant",
         };
     }
@@ -188,8 +188,8 @@ public class AccountService : BaseService
         {
             FirstName = user.Name,
             LastName = user.Surname,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber,
+            Email = user.Email ?? string.Empty,
+            PhoneNumber = user.PhoneNumber ?? string.Empty,
             Role = roles.FirstOrDefault() ?? "Tenant",
         };
     }
@@ -255,8 +255,8 @@ public class AccountService : BaseService
         {
             FirstName = user.Name,
             LastName = user.Surname,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber,
+            Email = user.Email ?? string.Empty,
+            PhoneNumber = user.PhoneNumber ?? string.Empty,
             Role = roles.FirstOrDefault() ?? "Tenant",
         };
     }
@@ -266,8 +266,8 @@ public class AccountService : BaseService
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Name, user.Email),
+            new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
+            new Claim(ClaimTypes.Name, user.Email ?? string.Empty),
             new Claim("firstName", user.Name ?? ""),
             new Claim("lastName", user.Surname ?? ""),
             new Claim("phoneNumber", user.PhoneNumber ?? ""),
@@ -275,9 +275,20 @@ public class AccountService : BaseService
 
         // Add roles to claims
         var roles = _userManager.GetRolesAsync(user).Result;
+        var configuredRoleClaimType = _configuration["Jwt:RoleClaimType"];
+        var roleClaimType = string.IsNullOrWhiteSpace(configuredRoleClaimType)
+            ? "role"
+            : configuredRoleClaimType;
+
         foreach (var role in roles)
         {
-            claims.Add(new Claim(_configuration["Jwt:RoleClaimType"] ?? "RoleClaimType", role));
+            claims.Add(new Claim(roleClaimType, role));
+
+            // Keep standard "role" claim for compatibility across gateways/proxies.
+            if (!string.Equals(roleClaimType, "role", StringComparison.OrdinalIgnoreCase))
+            {
+                claims.Add(new Claim("role", role));
+            }
         }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? "Key"));
