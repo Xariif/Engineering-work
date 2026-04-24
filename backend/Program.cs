@@ -102,6 +102,9 @@ builder
     .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        var configuredRoleClaimType = builder.Configuration["Jwt:RoleClaimType"];
+        var configuredNameClaimType = builder.Configuration["Jwt:NameClaimType"];
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -110,12 +113,19 @@ builder
             ValidAudience = builder.Configuration["Jwt:Audience"],
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
+                Encoding.UTF8.GetBytes(
+                    builder.Configuration["Jwt:Key"]
+                        ?? throw new InvalidOperationException("Jwt:Key is not configured.")
+                )
             ),
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero,
-            RoleClaimType = builder.Configuration["Jwt:RoleClaimType"],
-            NameClaimType = builder.Configuration["Jwt:NameClaimType"],
+            RoleClaimType = string.IsNullOrWhiteSpace(configuredRoleClaimType)
+                ? "role"
+                : configuredRoleClaimType,
+            NameClaimType = string.IsNullOrWhiteSpace(configuredNameClaimType)
+                ? ClaimTypes.Name
+                : configuredNameClaimType,
         };
 
         // Handle preflight requests
