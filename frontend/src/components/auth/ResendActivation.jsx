@@ -16,7 +16,7 @@ const ResendActivation = () => {
 
 	const handleBack = () => {
 		navigate("/login");
-	};z
+	};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
