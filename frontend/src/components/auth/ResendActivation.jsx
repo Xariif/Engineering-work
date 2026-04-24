@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Container, TextField, Typography, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import EmailIcon from "@mui/icons-material/Email";
+import accountService from "../../services/accountService.js";
 
 
 import ArrowBackIosNewOutlinedIcon from "@mui/icons-material/ArrowBackIosNewOutlined"; // Import the arrow icon
@@ -15,7 +16,7 @@ const ResendActivation = () => {
 
 	const handleBack = () => {
 		navigate("/login");
-	};
+	};z
 
   const handleSubmit = async (e) => {
     e.preventDefault();
