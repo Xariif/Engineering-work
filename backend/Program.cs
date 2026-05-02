@@ -102,6 +102,9 @@ builder
     .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        // Preserve raw JWT claim names (e.g. "role") so role policies match token content.
+        options.MapInboundClaims = false;
+
         var configuredRoleClaimType = builder.Configuration["Jwt:RoleClaimType"];
         var configuredNameClaimType = builder.Configuration["Jwt:NameClaimType"];
 

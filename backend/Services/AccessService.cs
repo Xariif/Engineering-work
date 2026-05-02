@@ -52,12 +52,18 @@ public class AccessService : BaseService
 
     public async Task<GetAccessData> GetTenantAccessDataAsync(string userId)
     {
-        // Get all store IDs the user has access to,
-        var t = await _context.Accesses.ToListAsync();
-        var accessibleStoreIds = await _context.Accesses
+        // Get all store IDs the user has direct access to.
+        var accessibleStoreIdsRaw = await _context.Accesses
             .Where(a => a.UserId == userId && a.ResourceType == ResourceType.Store)
-            .Select(a => int.Parse(a.ResourceId))
+            .Select(a => a.ResourceId)
             .ToListAsync();
+
+        var accessibleStoreIds = accessibleStoreIdsRaw
+            .Select(id => int.TryParse(id, out var parsedId) ? parsedId : (int?)null)
+            .Where(id => id.HasValue)
+            .Select(id => id!.Value)
+            .Distinct()
+            .ToList();
 
         if (!accessibleStoreIds.Any())
         {
@@ -114,13 +120,42 @@ public class AccessService : BaseService
 
     public async Task<IEnumerable<int>> GetAccessibleTenantIdsAsync(string userId)
     {
-        // Get all tenant IDs the user has access to
-        var tenantIds = await _context.Accesses
+        // Get tenant IDs from direct store-level access.
+        var directTenantIdsRaw = await _context.Accesses
             .Where(a => a.UserId == userId && a.ResourceType == ResourceType.Store)
-            .Select(a => int.Parse(a.ResourceId))
+            .Select(a => a.ResourceId)
             .ToListAsync();
 
-        return tenantIds;
+        var directTenantIds = directTenantIdsRaw
+            .Select(id => int.TryParse(id, out var parsedId) ? parsedId : (int?)null)
+            .Where(id => id.HasValue)
+            .Select(id => id!.Value)
+            .ToList();
+
+        // Managers can access all tenants in malls they manage.
+        var managerMallIdsRaw = await _context.Accesses
+            .Where(a => a.UserId == userId && a.ResourceType == ResourceType.Mall && a.Role == Role.Manager)
+            .Select(a => a.ResourceId)
+            .ToListAsync();
+
+        var managerMallIds = managerMallIdsRaw
+            .Select(id => int.TryParse(id, out var parsedId) ? parsedId : (int?)null)
+            .Where(id => id.HasValue)
+            .Select(id => id!.Value)
+            .Distinct()
+            .ToList();
+
+        var managerTenantIds = managerMallIds.Any()
+            ? await _context.Tenants
+                .Where(t => managerMallIds.Contains(t.MallId))
+                .Select(t => t.Id)
+                .ToListAsync()
+            : new List<int>();
+
+        return directTenantIds
+            .Union(managerTenantIds)
+            .Distinct()
+            .ToList();
     }
 
     public async Task AddTenantAccessAsync(string userEmail, int tenantId)
@@ -199,12 +234,19 @@ public class AccessService : BaseService
     public async Task<List<Backend.Database.Mall>> GetManagerMallsAsync(string userId)
     {
         // Check if user is a manager for any malls
-        var mallAccessIds = await _context.Accesses
+        var mallAccessIdsRaw = await _context.Accesses
             .Where(a => a.UserId == userId &&
                      a.ResourceType == ResourceType.Mall &&
                      a.Role == Role.Manager)
-            .Select(a => int.Parse(a.ResourceId))
+            .Select(a => a.ResourceId)
             .ToListAsync();
+
+        var mallAccessIds = mallAccessIdsRaw
+            .Select(id => int.TryParse(id, out var parsedId) ? parsedId : (int?)null)
+            .Where(id => id.HasValue)
+            .Select(id => id!.Value)
+            .Distinct()
+            .ToList();
 
         // Get all malls the manager has access to
         var malls = await _context.Malls
